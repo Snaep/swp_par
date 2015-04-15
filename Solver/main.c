@@ -7,7 +7,7 @@ int _tmain( unsigned int argc, TCHAR** argv ) {
 	ParameterSet params;
 	Solver solver;
 	int rc;
-
+	//hallo test
 	memset( &params, 0, sizeof( ParameterSet ) );
 
 	ParameterSet_parse( argc, argv, &params );
