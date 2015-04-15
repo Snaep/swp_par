@@ -24,10 +24,10 @@
     <ClCompile Include="parameter.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="solver.c">
+    <ClCompile Include="strategies.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="strategies.c">
+    <ClCompile Include="solver.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
