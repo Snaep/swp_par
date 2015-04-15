@@ -1,5 +1,7 @@
 #include "sudoku.h"
 #include "helper.h"
+
+#include <stdio.h>
 #include <stdlib.h>
 
 Sudoku* Sudoku_Parse( char* filepath, char delimiter ) {
@@ -9,8 +11,7 @@ Sudoku* Sudoku_Parse( char* filepath, char delimiter ) {
 	TCHAR** line;
 	int read, i, row, pi;
 
-	fptr = _tfopen( filepath, _T( "r" ) );
-	if( fptr == NULL ) return NULL;
+	if( _tfopen_s( &fptr, filepath, _T( "r" ) ) != 0 ) return NULL;
 		
 	sud->length = 0;
 	read = 0;
