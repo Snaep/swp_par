@@ -7,6 +7,7 @@ typedef struct {
 	int** grid;
 
 	int length;
+	int length_of_box;
 
 } Sudoku;
 

@@ -25,6 +25,7 @@ Sudoku* Sudoku_Parse( char* filepath, char delimiter ) {
 				if( sud == NULL ) goto CLEANUP;
 
 				sud->length = (int)line[0];
+				sud->length_of_box = ( int ) ( 0.5f + sqrt( sud->length ) );
 				sud->grid = ( int** ) calloc( ( int ) line[0], sizeof( int* ) );
 				if( sud->grid == NULL ) goto CLEANUP;
 				for( i = 0; i < (int)line[0]; i++ ) sud->grid[i] = ( int* ) malloc( sizeof( int ) * ( int ) line[0] );
