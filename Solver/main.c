@@ -8,6 +8,8 @@ int _tmain( unsigned int argc, TCHAR** argv ) {
 	Solver solver;
 	int rc;
 
+	memset( &params, 0, sizeof( ParameterSet ) );
+
 	ParameterSet_parse( argc, argv, &params );
 
 	if( params.strategies == NULL || params.strategies[0] == NULL ) {
