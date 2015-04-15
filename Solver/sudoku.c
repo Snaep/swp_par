@@ -5,7 +5,7 @@ TCHAR* ReadAllBytes( TCHAR * file ) {
 	long len;
 	TCHAR* retv;
 
-	if( _tfopen_s( &fptr, file, "r" ) != 0 ) return NULL;
+	if( _tfopen_s( &fptr, file, _T( "r" ) ) != 0 ) return NULL;
 
 	fseek( fptr, 0, SEEK_END );
 	len = ftell( fptr );
@@ -14,7 +14,7 @@ TCHAR* ReadAllBytes( TCHAR * file ) {
 	if( retv != NULL ) {
 		fseek( fptr, 0, SEEK_SET );
 		fread( retv, 1, len, fptr );
-		retv[len] = '\0';
+		retv[len] = _T( '\0' );
 	}
 
 	fclose( fptr );
@@ -78,7 +78,7 @@ Sudoku* Sudoku_Parse( char* filepath, char delimiter ) {
 		//if current tchar is not ctrl tchar, parse as cell content
 		} else {
 			cellvalue *= 10;
-			cellvalue += file[i] - '0';
+			cellvalue += file[i] - _T( '0' );
 		}
 	}
 
@@ -102,4 +102,53 @@ END:
 	//free loaded file
 	if( file != NULL ) free( file );
 	return sud;
+}
+
+int ValidateSudoku( Sudoku* sud ) {
+	int i, j, m, n;
+	int* buffer;
+
+	buffer = malloc( sizeof( int ) * sud->length + sizeof( int ) );
+	if( buffer == NULL ) return 1;
+
+	//test all rows / cols / boxes
+	for( i = 0; i < sud->length; i++ ) {
+
+		//test row
+		memset( buffer, 0, sizeof( int ) * sud->length );
+		for( j = 0; j < sud->length; j++ ) {
+			if( sud->grid[i][j] == 0 ) goto ERROR; //if cell is empty return error
+			if( buffer[sud->grid[i][j] != 0] ) goto ERROR; //if previous cell contains value return error
+			buffer[sud->grid[i][j]] = 1; //store cell value
+		}
+
+		//test col
+		memset( buffer, 0, sizeof( int ) * sud->length );
+		for( j = 0; j < sud->length; j++ ) {
+			if( sud->grid[j][i] == 0 ) goto ERROR; //if cell is empty return error
+			if( buffer[sud->grid[j][i] != 0] ) goto ERROR; //if previous cell contains value return error
+			buffer[sud->grid[j][i]] = 1; //store cell value
+		}
+	}
+
+
+	//test box
+	memset( buffer, 0, sizeof( int ) * sud->length );
+	for( i = 0; i < sud->length; i += sud->length_of_box ) {
+		for( j = 0; j < sud->length; j += sud->length_of_box ) {
+
+			for( m = 0; m < sud->length_of_box; m++ ) {
+				for( n = 0; n < sud->length_of_box; n++ ) {
+					if( buffer[sud->grid[i + m][j + n]] != 0 ) goto ERROR;
+					buffer[sud->grid[i + m][j + n]] = 1;
+				}
+			}
+		}
+	}
+
+	free( buffer );
+	return 0;
+ERROR:
+	free( buffer );
+	return 1;
 }

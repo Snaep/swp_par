@@ -1,11 +1,12 @@
 #pragma once
 
 #include "sudoku.h"
+#include "strategies.h"
 
 typedef struct {
 
-	int strategies[8];
-	int parallelization;
+	Strategy* strategies;
+	unsigned int solver;
 
 	TCHAR filepath[512];
 

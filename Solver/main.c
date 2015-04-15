@@ -1,43 +1,50 @@
 #include "defaults.h"
 #include "parameter.h"
-#include "parallel.h"
+#include "solver.h"
 
-//0:ok
-//1:nok
-//prüft, ob mindestens eine Strategie ausgewählt wurde
-int test_strat( ParameterSet* params ) {
-	int i;
-	for( i = 0; i < sizeof( params->strategies ) / sizeof( int ); i++ ) if( params->strategies[i] != 0 ) return 0;
-	return 1;
-}
 
-int _tmain(int argc, TCHAR** argv) {
+int _tmain( int argc, TCHAR** argv ) {
 	ParameterSet params;
+	Solver solver;
+	int rc;
 
 	ParameterSet_parse( argc, argv, &params );
 
+	if( params.strategies == NULL || params.strategies[0] == NULL ) {
+		_tprintf( _T( "no strategies detected.\n" ) );
+		_EXIT( 1 );
+	}
+
 	if( params.sud == NULL ) {
-		_tprintf( _T( "Das Sudoku konnte nicht geladen werden.\n" ) );
-		_ONEXIT();
-		return 1;
+		_tprintf( _T( "Unable to load/parse sudoku.\n" ) );
+		_EXIT( 1 );
 	}
 
-	if( test_strat( &params ) != 0 ) {
-		_tprintf( _T( "Keine Strategien ausgewählt.\n" ) );
-		_ONEXIT();
-		return 1;
+	solver = GetSolver( params.solver );
+	if( solver == NULL ) {
+		_tprintf( _T( "the specified parallelization mode is unsupported.\n" ) );
+		_EXIT( 1 );
 	}
 
-	switch( params.parallelization ) {
-	case PAR_SEQ:
-		_tprintf( _T( "yey" ) );
+	//solve grid with obtained solver
+	switch( rc = solver( params.sud, params.strategies ) ) {
+	case SLV_SUCCESS:
 		break;
 	default:
-		_tprintf( _T( "Der Parallelisierungsmodus ( %i ) wird nicht unterstützt\n" ), params.parallelization );
-		_ONEXIT();
-		return 1;
+		_tprintf( _T( "unknown error during solver execution ( %i )\n", rc ) );
+		_EXIT( 1 );
 	}
 
-	_ONEXIT();
+	if( ValidateSudoku( params.sud ) != 0 ) {
+		_tprintf( _T( "solution invalid.\n" ) );
+		_EXIT( 1 );
+	}
+
+	//let windows do the cleanup?
+	//params.sud / params.strategies
+
+	//Save solved Sudoku to file
+
+	//exit
 	return 0;
 }

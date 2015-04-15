@@ -1,15 +1,19 @@
 #include "parameter.h"
+#include "solver.h"
 #include <stdio.h>
 
 
 void ParameterSet_parse( int argc, TCHAR** argv, ParameterSet* dest ) {
-	int i, j;
+	unsigned int i, j;
+	unsigned int ct; //counter for no of strategies
+	unsigned int strats[10]; //buffer for strategies
 
 	if( dest == NULL || argv == NULL ) return;
 
 	for( i = 0; i < sizeof( dest->strategies ) / sizeof( int ); i++ ) dest->strategies[i] = 0;
 
 	dest->filepath[0] = 0;
+	ct = 0;
 
 	for( i = 1; i < argc; i++ ) {
 		if( argv[i][0] != _T( '-' ) ) continue;
@@ -24,7 +28,7 @@ void ParameterSet_parse( int argc, TCHAR** argv, ParameterSet* dest ) {
 
 		switch( argv[i][2] ) {	
 		case _T( 'a' ): //par
-			dest->parallelization = argv[i][5] - _T( '0' );
+			dest->solver = argv[i][5] - _T( '0' );
 			break;
 		case _T( 'u' ): //sud
 			j = 5;
@@ -35,7 +39,7 @@ void ParameterSet_parse( int argc, TCHAR** argv, ParameterSet* dest ) {
 			dest->filepath[j - 5] = 0;
 			break;
 		case _T( 't' ): //st
-			dest->strategies[argv[i][3] - _T( '0' )] = 1;
+			strats[ct++] = argv[i][3] - _T( '0' );
 			break;
 		default:
 			_tprintf( _T( "Unknown parameter:%s\n" ), argv[i] );
@@ -45,5 +49,9 @@ void ParameterSet_parse( int argc, TCHAR** argv, ParameterSet* dest ) {
 
 	if( dest->filepath[0] == 0 ) return;
 
+	dest->strategies = GetStrategies( strats, ct );
+	if( dest->strategies == NULL ) return;
+
+	//parse sudoku with delimiter ' '
 	dest->sud = Sudoku_Parse( dest->filepath, ' ' );
 }

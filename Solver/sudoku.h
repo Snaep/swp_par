@@ -12,3 +12,7 @@ typedef struct {
 } Sudoku;
 
 Sudoku* Sudoku_Parse( TCHAR* filepath, TCHAR delimiter );
+
+//returns 0: sudoku is solved and valid
+//returns 1: sudoku in solved incorrectly or incompletly
+int ValidateSudoku( Sudoku* sud );

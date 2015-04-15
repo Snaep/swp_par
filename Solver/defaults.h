@@ -7,12 +7,12 @@
 
 #ifdef _DEBUG
 #ifdef UNICODE
-#define _ONEXIT() _tprintf(_T("\nExiting in Module %s on Line %i\n"), __FILEW__, __LINE__); system("pause")
+#define _EXIT(a) {_tprintf(_T("\nExiting in Module %s on Line %i\n"), __FILEW__, __LINE__); system("pause"); return a;}
 #else
-#define _ONEXIT() _tprintf(_T("\nExiting in Module %s on Line %i\n"), __FILE__, __LINE__); system("pause")
+#define _EXIT(a) {_tprintf(_T("\nExiting in Module %s on Line %i\n"), __FILE__, __LINE__); system("pause"); return a;}
 #endif
 #else
-#define _ONEXIT()
+#define _EXIT(a) {return a;}
 #endif
 
 

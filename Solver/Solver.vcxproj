@@ -13,14 +13,15 @@
   <ItemGroup>
     <ClCompile Include="main.c" />
     <ClCompile Include="parameter.c" />
-    <ClCompile Include="strategie.c" />
+    <ClCompile Include="solver.c" />
+    <ClCompile Include="strategies.c" />
     <ClCompile Include="sudoku.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="defaults.h" />
-    <ClInclude Include="parallel.h" />
+    <ClInclude Include="solver.h" />
     <ClInclude Include="parameter.h" />
-    <ClInclude Include="strategie.h" />
+    <ClInclude Include="strategies.h" />
     <ClInclude Include="sudoku.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
