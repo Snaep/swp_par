@@ -10,6 +10,17 @@
       <Platform>Win32</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="helper.c" />
+    <ClCompile Include="main.c" />
+    <ClCompile Include="strategie.c" />
+    <ClCompile Include="sudoku.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="helper.h" />
+    <ClInclude Include="strategie.h" />
+    <ClInclude Include="sudoku.h" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{599997C3-D187-4B0F-9735-FBA753461B77}</ProjectGuid>
     <RootNamespace>Solver</RootNamespace>
@@ -63,8 +74,6 @@
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
