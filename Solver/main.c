@@ -23,7 +23,7 @@ int _tmain( unsigned int argc, TCHAR** argv ) {
 		_NOTIFYEXIT
 		return 1;
 	}
-	//dickbutt
+
 	solver = GetSolver( params.solver );
 	if( solver == NULL ) {
 		_tprintf( _T( "the specified parallelization mode is unsupported.\n" ) );
