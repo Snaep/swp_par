@@ -5,13 +5,13 @@
 
 void ParameterSet_parse( int argc, TCHAR** argv, ParameterSet* dest ) {
 	unsigned int i, j;
-	unsigned int ct; //counter for no of strategies
+	int ct; //counter for no of strategies
 	unsigned int strats[10]; //buffer for strategies
 
 	if( dest == NULL || argv == NULL ) return;
+	
 
-	for( i = 0; i < sizeof( dest->strategies ) / sizeof( int ); i++ ) dest->strategies[i] = 0;
-
+	memset( strats, 0, sizeof( int ) * 10 );
 	dest->filepath[0] = 0;
 	ct = 0;
 
