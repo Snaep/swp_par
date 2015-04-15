@@ -1,8 +1,8 @@
 #include "sudoku.h"
 #include "helper.h"
 
-#include <stdio.h>
 #include <stdlib.h>
+#include <stdio.h>
 
 Sudoku* Sudoku_Parse( char* filepath, char delimiter ) {
 	Sudoku* sud;
@@ -12,33 +12,36 @@ Sudoku* Sudoku_Parse( char* filepath, char delimiter ) {
 	int read, i, row, pi;
 
 	if( _tfopen_s( &fptr, filepath, _T( "r" ) ) != 0 ) return NULL;
-		
-	sud->length = 0;
+
 	read = 0;
+	sud = NULL;
 	
 	while( fread( &buffer[read], sizeof( TCHAR ), 1, fptr ) != 0 ) {
-		if( read > 1 && buffer[read] == _T('\n') && buffer[read - 1] == _T('\r') ) {
+		if( read >= 1 && buffer[read] == _T('\n') ) {
+			buffer[read + 1] = 0;
 			line = string_split( buffer, delimiter );
-			if( line == NULL || line[0] < 1) goto CLEANUP;
+			if( line == NULL || (int)line[0] < 1) goto CLEANUP;
+			line[0]--;
 
 			if( sud == NULL ) {
 				sud = ( Sudoku* ) malloc( sizeof( Sudoku ) );
 				if( sud == NULL ) goto CLEANUP;
 
-				sud->length = line[0];
+				sud->length = (int)line[0];
 				sud->grid = ( int** ) calloc( ( int ) line[0], sizeof( int* ) );
 				if( sud->grid == NULL ) goto CLEANUP;
-				for( i = 0; i < line[0]; i++ ) sud->grid[i] = ( int* ) malloc( sizeof( int ) * ( int ) line[0] );
+				for( i = 0; i < (int)line[0]; i++ ) sud->grid[i] = ( int* ) malloc( sizeof( int ) * ( int ) line[0] );
 				row = 0;
 			}
 
-			for( i = 0; i < line[0]; i++ ) {
-				if( !int_parse( line[i], &pi ) ) goto CLEANUP;
-				sud->grid[row][i] = pi;
+			for( i = 1; i <= (int)line[0]; i++ ) {
+				if( int_parse( line[i], &pi ) != 0 ) goto CLEANUP;
+				sud->grid[row][i - 1] = pi;
 			}
 
 			row++;
 		}
+		read++;
 	}
 
 	goto END;
@@ -50,7 +53,9 @@ CLEANUP:
 	}
 END:
 	if( line != NULL ) {
-		for( i = line[0]; i; i-- ) free( line[i] );
+		for( i = ( int ) line[0]; i; i-- ) {
+			if( line[i] != NULL ) free( line[i] );
+		}
 		free( line );
 	}
 	fclose( fptr );

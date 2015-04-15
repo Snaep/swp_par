@@ -27,6 +27,9 @@
     <ClCompile Include="sudoku.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="parameter.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="helper.h">
@@ -36,6 +39,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="sudoku.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="parallel.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="parameter.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

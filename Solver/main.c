@@ -1,18 +1,40 @@
-#include "helper.h"
+#include "parameter.h"
+#include "parallel.h"
+
 #include <stdio.h>
 
-int main( int argc, char** argv ) {
-	char test[] = "Hallo Peter 123 ";
-	char** ret;
+//0:ok
+//1:nok
+//prüft, ob mindestens eine Strategie ausgewählt wurde
+int test_strat( ParameterSet* params ) {
 	int i;
+	for( i = 0; i < sizeof( params->strategies ) / sizeof( int ); i++ ) if( params->strategies[i] != 0 ) return 0;
+	return 1;
+}
 
-	ret = string_split( test, 'Z' );
+int _tmain(int argc, TCHAR** argv) {
+	ParameterSet params;
 
-	for( i = 1; i <= ret[0]; i++ ) {
-		printf( "%s\n", ret[i] );
+	ParameterSet_parse( argc, argv, &params );
+
+	if( params.sud == NULL ) {
+		_tprintf( _T( "Das Sudoku konnte nicht geladen werden.\n" ) );
+		return 1;
 	}
 
-	getchar();
+	if( test_strat( &params ) != 0 ) {
+		_tprintf( _T( "Keine Strategien ausgewählt.\n" ) );
+		return 1;
+	}
+
+	switch( params.parallelization ) {
+	case PAR_SEQ:
+		_tprintf( _T( "yey" ) );
+		break;
+	default:
+		_tprintf( _T( "Der Parallelisierungsmodus ( %i ) wird nicht unterstützt\n" ), params.parallelization );
+		return 1;
+	}
 
 	return 0;
 }

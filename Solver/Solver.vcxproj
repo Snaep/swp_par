@@ -13,11 +13,14 @@
   <ItemGroup>
     <ClCompile Include="helper.c" />
     <ClCompile Include="main.c" />
+    <ClCompile Include="parameter.c" />
     <ClCompile Include="strategie.c" />
     <ClCompile Include="sudoku.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="helper.h" />
+    <ClInclude Include="parallel.h" />
+    <ClInclude Include="parameter.h" />
     <ClInclude Include="strategie.h" />
     <ClInclude Include="sudoku.h" />
   </ItemGroup>

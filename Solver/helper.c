@@ -2,6 +2,7 @@
 
 #include <stdlib.h>
 
+
 TCHAR ** string_split( TCHAR* string, TCHAR splitchar ) {
 	short substrings[512];
 	int length;
@@ -25,7 +26,7 @@ TCHAR ** string_split( TCHAR* string, TCHAR splitchar ) {
 	retv = ( TCHAR** ) malloc( sizeof( TCHAR* ) * ( counts ) );
 	if( retv == NULL ) return NULL;
 
-	retv[0] = counts;
+	retv[0] = (TCHAR*)counts;
 	if( counts == 1 ) substrings[0] = length;
 
 	retv[1] = ( TCHAR* ) malloc( sizeof( TCHAR ) * ( substrings[0] + 1 ) );
@@ -53,5 +54,12 @@ TCHAR ** string_split( TCHAR* string, TCHAR splitchar ) {
 }
 
 int int_parse( TCHAR* input, int* result ) {
+	int i;
+
+	if( input == 0 || result == 0 ) return 1;
+	for( i = 0; input[i]; i++ ) if( !_istdigit( input[i] ) ) return 1;
+	
+	*result = _ttoi( input );
+
 	return 0;
 }
