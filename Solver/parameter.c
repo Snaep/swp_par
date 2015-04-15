@@ -3,7 +3,7 @@
 #include <stdio.h>
 
 
-void ParameterSet_parse( int argc, TCHAR** argv, ParameterSet* dest ) {
+void ParameterSet_parse( unsigned int argc, TCHAR** argv, ParameterSet* dest ) {
 	unsigned int i, j;
 	int ct; //counter for no of strategies
 	unsigned int strats[10]; //buffer for strategies
