@@ -1,6 +1,6 @@
 #include "solver.h"
 
-void SolveSequential( Sudoku* sud, int( **strategies )( Sudoku* grid, int x, int y ) ) {
+int SolveSequential( Sudoku* sud, int( **strategies )( Sudoku* grid, int x, int y ) ) {
 	int x, y, i;
 	int changes;
 	
@@ -27,6 +27,9 @@ void SolveSequential( Sudoku* sud, int( **strategies )( Sudoku* grid, int x, int
 			}
 		}
 	} while( changes != 0 );
+
+	//return 0
+	return changes;
 }
 
 static Solver solver[] = {
