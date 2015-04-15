@@ -48,7 +48,7 @@ namespace GUI {
 
             foreach( string line in lines ) {
                 string[] contents = line.Split( p2 );
-                Cell[] cells = new Cell[contents.Length];
+                Cell[] cells = new Cell[contents.Length - 1];
                 for( int j = 0; j < cells.Length; j++ ) {
                     string value = contents[j];
                     if( value == "" ) value = null;
@@ -92,7 +92,7 @@ namespace GUI {
                 lgrid = null;
                 while(!reader.EndOfStream) {
                     string[] contents = reader.ReadLine().Split( ' ' );
-                    Cell[] cells = new Cell[contents.Length];
+                    Cell[] cells = new Cell[contents.Length - 1];
                     for( int j = 0; j < cells.Length; j++ ) {
                         string value = contents[j];
                         if( value == "" ) value = null;
