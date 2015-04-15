@@ -1,9 +1,6 @@
 #include "sudoku.h"
 #include "helper.h"
 
-#include <stdlib.h>
-#include <stdio.h>
-
 Sudoku* Sudoku_Parse( char* filepath, char delimiter ) {
 	Sudoku* sud;
 	FILE* fptr;

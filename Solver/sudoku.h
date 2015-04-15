@@ -1,6 +1,6 @@
 #pragma once
 
-#include <tchar.h>
+#include "defaults.h"
 
 typedef struct {
 

@@ -1,7 +1,6 @@
+#include "defaults.h"
 #include "parameter.h"
 #include "parallel.h"
-
-#include <stdio.h>
 
 //0:ok
 //1:nok
@@ -19,11 +18,13 @@ int _tmain(int argc, TCHAR** argv) {
 
 	if( params.sud == NULL ) {
 		_tprintf( _T( "Das Sudoku konnte nicht geladen werden.\n" ) );
+		_ONEXIT();
 		return 1;
 	}
 
 	if( test_strat( &params ) != 0 ) {
 		_tprintf( _T( "Keine Strategien ausgewählt.\n" ) );
+		_ONEXIT();
 		return 1;
 	}
 
@@ -33,8 +34,10 @@ int _tmain(int argc, TCHAR** argv) {
 		break;
 	default:
 		_tprintf( _T( "Der Parallelisierungsmodus ( %i ) wird nicht unterstützt\n" ), params.parallelization );
+		_ONEXIT();
 		return 1;
 	}
 
+	_ONEXIT();
 	return 0;
 }

@@ -1,7 +1,5 @@
 #include "helper.h"
 
-#include <stdlib.h>
-
 
 TCHAR ** string_split( TCHAR* string, TCHAR splitchar ) {
 	short substrings[512];
