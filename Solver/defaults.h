@@ -14,3 +14,7 @@
 #else
 #define _ONEXIT()
 #endif
+
+
+#define ENV_NEWLINE _T('\n')
+#define ENDOFSTRING _T('\0')
