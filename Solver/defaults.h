@@ -5,7 +5,7 @@
 #include <tchar.h>
 #include <math.h>
 
-#ifdef _DEBUG
+#ifdef _DEBUG_
 #ifdef UNICODE
 #define _NOTIFYEXIT {_tprintf(_T("\nExiting in Module %s on Line %i\n"), __FILEW__, __LINE__); system("pause");}
 #else

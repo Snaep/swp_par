@@ -74,7 +74,7 @@ namespace GUI {
             using( var stream = new System.IO.FileStream( file,System.IO.FileMode.CreateNew ) ) {
                 byte[] buff;
                 foreach( var row in this.grid ) {
-                    foreach( var cell in this.grid ) {
+                    foreach( var cell in row ) {
                         buff = Encoding.Default.GetBytes(cell.ToString() + ' ');
                         stream.Write(buff, 0, buff.Length);    
                     }

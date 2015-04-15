@@ -16,11 +16,54 @@ namespace GUI {
             this.toolStripTextBox1.Text = "9";
             this.defaultLength = 9;
             this.openFile = null;
+
+            this.spForm = new StrategieForm();
+            this.parForm = new ParallelisierungsForm();
+            this.CreateSolverProcess();
         }
 
         private string openFile;
         private int defaultLength;
         private Sudoku sGridPreset, sGridSolved;
+        System.Diagnostics.Process solverProcess;
+
+        StrategieForm spForm;
+        ParallelisierungsForm parForm;
+
+
+        string solverFile = null;
+        private string GetSudokuFilePath() {
+            this.solverFile = Guid.NewGuid().ToString() + ".tmp";
+
+            this.sGridPreset.SaveToFile(  this.GetSolverFileDirectory() + this.solverFile );
+
+            return this.solverFile;
+        }
+
+        private void CreateSolverProcess() {
+            this.solverProcess = new System.Diagnostics.Process();
+            this.solverProcess.StartInfo.RedirectStandardOutput = true;
+            this.solverProcess.StartInfo.RedirectStandardError = true;
+            this.solverProcess.StartInfo.FileName = this.GetSolverProcessDirectory() + "solver.exe";
+            this.solverProcess.StartInfo.UseShellExecute = false;
+            this.solverProcess.StartInfo.CreateNoWindow = true;
+            this.solverProcess.StartInfo.WorkingDirectory = System.IO.Path.GetFullPath( GetSolverProcessDirectory() );
+        }
+        private string GetSolverProcessDirectory() {
+#if DEBUG
+            return "..\\..\\..\\Debug\\";
+#else
+            return "..\\..\\..\\Release\\";
+#endif
+        }
+
+        private string GetSolverFileDirectory() {
+#if DEBUG
+            return "..\\..\\..\\Debug\\";
+#else
+            return ".\\";
+#endif
+        }
 
         #region MenuStrip
         #region MENU
@@ -51,21 +94,22 @@ namespace GUI {
         }
 
         //paste
-        private static char[] delimiter = new char[]{ ' ', '\t', '|', ',', '.', ':', ';', '-', '_' };
+        private readonly char[] delimiter = new char[] { ' ', '\t', ':', ';', ',', '.', '_', '-', '|' };
         private void toolStripMenuItem2_Click( object sender, EventArgs e ) {
-            Sudoku grid = null;
-            foreach( char d in Form1.delimiter ) {
+            Sudoku sGrid = null;
+            foreach( char d in delimiter ) {
                 try {
-                    grid = Sudoku.Parse( Clipboard.GetText(), d );
-                    if( grid != null ) break;
-                } catch {
-                }
+                    if( ( this.sGridPreset = Sudoku.Parse( Clipboard.GetText(), d ) ) != null ) break;
+                } catch { }
             }
-            if( grid == null ) MessageBox.Show( "Fehler beim lesen der Eingabe.", "Fehler" );
-            else {
-                this.sGridPreset = grid;
-                this.PlaceSudoku();
+
+            if( sGrid == null ) {
+                MessageBox.Show( "Fehler beim Lesen der Eingabe." );
+                return;
             }
+
+            this.sGridPreset = sGrid;
+            this.PlaceSudoku();
         }
 
         private void beendenToolStripMenuItem_Click( object sender, EventArgs e ) {
@@ -116,17 +160,43 @@ namespace GUI {
 
 
         private void generierenToolStripMenuItem_Click( object sender, EventArgs e ) {
-            string dir = this.toolStripTextBox1.Text + 'x' + this.toolStripTextBox1.Text + '_';
-            if( this.normalToolStripMenuItem.Checked ) dir += 'n';
-            else if( this.leichtToolStripMenuItem.Checked ) dir += 'l';
-            else dir += 's';
+            string sudDir = this.toolStripTextBox1.Text + 'x' + this.toolStripTextBox1.Text;
+            if( this.leichtToolStripMenuItem.Checked ) sudDir += 'l';
+            else if( this.normalToolStripMenuItem.Checked ) sudDir += 'n';
+            else sudDir += 's';
 
-            var files = new System.IO.DirectoryInfo( dir ).GetFiles();
+            if( !System.IO.Directory.Exists( sudDir ) ) throw new NotImplementedException( "lazy ass!" );
+
+            string[] files = System.IO.Directory.GetFiles( sudDir );
+            this.sGridPreset = new Sudoku( files[new Random().Next() % files.Length] );
+            this.sGridSolved = null;
 
         }
 
         private void lösenToolStripMenuItem_Click( object sender, EventArgs e ) {
+            if( this.sGridPreset == null ) return;
+            new System.Threading.Thread( new System.Threading.ThreadStart( new Action( () => {
 
+                this.solverProcess.StartInfo.Arguments = this.spForm.GetParameter() + this.parForm.GetParameter() + "-sud=" + this.GetSudokuFilePath();
+                this.solverProcess.Start();
+                this.solverProcess.WaitForExit();
+
+                //sudoku solved
+                if( this.solverProcess.ExitCode == 0 ) {
+                    try {
+                        this.sGridSolved = new Sudoku( this.GetSolverFileDirectory() + this.solverFile );
+                        this.sGridSolved.ApplyPreset( this.sGridPreset );
+                        this.PlaceSudoku( this.sGridSolved );
+                    } catch { }
+                    string sout = this.solverProcess.StandardOutput.ReadToEnd();
+
+                    if( sout != "" && sout != null ) MessageBox.Show( sout );
+                } else  MessageBox.Show( "Das Sudoku konnte nicht gelöst werden.\r\nFehlercode:" + this.solverProcess.ExitCode + Environment.NewLine + this.solverProcess.StandardOutput.ReadToEnd() );
+
+                System.IO.File.Delete( this.GetSolverFileDirectory() + this.solverFile );
+                this.solverFile = null;
+
+            } ) ) ).Start();
         }
         #endregion
 
@@ -152,10 +222,15 @@ namespace GUI {
 
 
         #endregion
-
+                                     
         private void PlaceSudoku() {
             this.pictureBox1.Image = this.sGridPreset.ToImage( 30 );
             this.toolStripTextBox1.Text = this.sGridPreset.Length + "";
+            this.RePlaceSudoku();
+        }
+        private void PlaceSudoku( Sudoku sudoku ) {
+            this.pictureBox1.Image = sudoku.ToImage( 30 );
+            this.toolStripTextBox1.Text = sudoku.Length + "";
             this.RePlaceSudoku();
         }
 
