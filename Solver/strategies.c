@@ -1,13 +1,19 @@
 #include "strategies.h"
 
-int ExampleStrategy( Sudoku* grid, int x, int y ) {
+int RowStrategy( Sudoku* sud, int x, int y ) {
+	return 0;
+}
+int ColStrategy( Sudoku* sud, int x, int y ) {
+	return 0;
+}
+int BoxStrategy( Sudoku* sud, int x, int y ) {
 	return 0;
 }
 
 static const Strategy strategies[] = {
-	&ExampleStrategy,
-	&ExampleStrategy,
-	&ExampleStrategy
+	&RowStrategy,
+	&ColStrategy,
+	&BoxStrategy
 };
 
 Strategy* GetStrategies( unsigned int* ids, int ct ) {
