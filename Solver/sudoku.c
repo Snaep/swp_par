@@ -55,6 +55,9 @@ Sudoku* Sudoku_Parse( char* filepath, char delimiter ) {
 		if( sud->grid[i] == NULL ) goto CLEANUP;
 	}
 
+	sud->buffer = ( int* ) malloc( sizeof( int ) * sud->length );
+	if( sud->buffer == NULL ) goto CLEANUP;
+
 	//calculate box length
 	sud->length_of_box = ( int ) ( 0.5f + sqrt( sud->length ) );	
 	cellvalue = 0;
@@ -94,6 +97,8 @@ CLEANUP:
 
 			free( sud->grid );
 		}
+
+		if( sud->buffer != NULL ) free( sud->buffer );
 
 		free( sud );
 		sud = NULL;
