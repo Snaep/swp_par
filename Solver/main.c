@@ -2,6 +2,7 @@
 #include "parameter.h"
 #include "solver.h"
 
+
 int _tmain( unsigned int argc, TCHAR** argv ) {
 	ParameterSet params;
 	Solver solver;

@@ -9,8 +9,6 @@ typedef struct {
 	int length;
 	int length_of_box;
 
-	int* buffer;
-
 } Sudoku;
 
 Sudoku* Sudoku_Parse( TCHAR* filepath, TCHAR delimiter );
