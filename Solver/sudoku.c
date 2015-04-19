@@ -25,18 +25,16 @@ TCHAR* ReadAllBytes( TCHAR * file ) {
 Sudoku* Sudoku_Parse( char* filepath, char delimiter ) {
 	Sudoku* sud;
 	TCHAR* file;
-	int i, rowindex, cellvalue, cellindex;
+	int i, j, rowindex, cellvalue, cellindex;
 
 	//read file
 	file = ReadAllBytes( filepath );
 	if( file == NULL ) return NULL;
 
 	//create sudoku
-	sud = ( Sudoku* ) malloc( sizeof( Sudoku ) );
+	sud = ( Sudoku* ) calloc( 1, sizeof( Sudoku ) );
 	if( sud == NULL ) goto CLEANUP;
-
-	sud->length = 0;
-
+	
 	//determine grid size by counting occurences of delimiter in first row
 	for( i = 0; file[i] != ENV_NEWLINE; i++ ) {
 		if( file[i] == delimiter ) sud->length++;
@@ -46,13 +44,30 @@ Sudoku* Sudoku_Parse( char* filepath, char delimiter ) {
 	if( sud->length < 2 ) goto CLEANUP;
 
 	//allocate grid
-	sud->grid = ( int** ) calloc( ( int ) sud->length, sizeof( int* ) );
+	sud->grid = ( int*** ) calloc( sud->length, sizeof( int** ) );
 	if( sud->grid == NULL ) goto CLEANUP;
 
 	//allocate grid rows
 	for( i = 0; i < sud->length; i++ ) {
-		sud->grid[i] = ( int* ) malloc( sizeof( int ) * sud->length );
+		sud->grid[i] = ( int** ) calloc( sud->length, sizeof( int* ) );
 		if( sud->grid[i] == NULL ) goto CLEANUP;
+
+		for( j = 0; j < sud->length; j++ ) {
+			sud->grid[i][j] = ( int* ) malloc( ( 1 + sud->length ) * sizeof( int* ) ); //content + n possibilities
+			if( sud->grid[i][j] == NULL ) goto CLEANUP;
+			memset( sud->grid[i][j], CELL_POSSIBLE, sizeof( int ) * ( sud->length + 1 ) );
+		}
+	}
+
+	//allocate contains helper
+	for( i = 0; i < 3; i++ ) {
+		sud->contains[i] = ( int** ) calloc( sud->length, sizeof( int* ) );
+		if( sud->contains[i] == NULL ) goto CLEANUP;
+		
+		for( j = 0; j < sud->length; j++ ) {
+			sud->contains[i][j] = ( int* ) calloc( sud->length + 1, sizeof( int ) );
+			if( sud->contains[i][j] == NULL ) goto CLEANUP;
+		}
 	}
 
 	//calculate box length
@@ -65,13 +80,13 @@ Sudoku* Sudoku_Parse( char* filepath, char delimiter ) {
 	for( i = 0; file[i] != ENDOFSTRING; i++ ) {
 		//if current tchar is delimiter, finish cell
 		if( file[i] == delimiter ) {
-			sud->grid[rowindex][cellindex++] = cellvalue;
+			SetCell( sud, cellindex++, rowindex, cellvalue );
 			if( cellindex == sud->length ) {
 				cellindex = 0;
-				//if no of rows == no of cols + 1 end parsing
+				//if no. of rows == no. of cols + 1 end parsing
 				if( ++rowindex == sud->length ) break;
-			}
-			cellvalue = 0;
+			}				
+			cellvalue = 0;			
 		//if current tchar is end of line increment rowindex
 		} else if( file[i] == ENV_NEWLINE ) {
 			rowindex++;
@@ -90,7 +105,14 @@ CLEANUP:
 
 		//free sudoku grid if allocated
 		if( sud->grid != NULL ) {
-			for( i = 0; i < sud->length; i++ ) if( sud->grid[i] != NULL ) free( sud->grid[i] );
+			for( i = 0; i < sud->length; i++ ) {
+				if( sud->grid[i] != NULL ) {
+					for( j = 0; j < sud->length; j++ ) {
+						if( sud->grid[i][j] != NULL ) free( sud->grid[i][j] );
+					}
+					free( sud->grid[i] );
+				}
+			}
 
 			free( sud->grid );
 		}
@@ -119,7 +141,7 @@ int ValidateSudoku( Sudoku* sud ) {
 		for( j = 0; j < sud->length; j++ ) {
 			if( sud->grid[i][j] == 0 ) goto ERROR; //if cell is empty return error
 			if( buffer[sud->grid[i][j] != 0] ) goto ERROR; //if previous cell contains value return error
-			buffer[sud->grid[i][j]] = 1; //store cell value
+			buffer[sud->grid[i][j][0]] = 1; //store cell value
 		}
 
 		//test col
@@ -127,7 +149,7 @@ int ValidateSudoku( Sudoku* sud ) {
 		for( j = 0; j < sud->length; j++ ) {
 			if( sud->grid[j][i] == 0 ) goto ERROR; //if cell is empty return error
 			if( buffer[sud->grid[j][i] != 0] ) goto ERROR; //if previous cell contains value return error
-			buffer[sud->grid[j][i]] = 1; //store cell value
+			buffer[sud->grid[j][i][0]] = 1; //store cell value
 		}
 	}
 
@@ -139,8 +161,8 @@ int ValidateSudoku( Sudoku* sud ) {
 
 			for( m = 0; m < sud->length_of_box; m++ ) {
 				for( n = 0; n < sud->length_of_box; n++ ) {
-					if( buffer[sud->grid[i + m][j + n]] != 0 ) goto ERROR;
-					buffer[sud->grid[i + m][j + n]] = 1;
+					if( buffer[sud->grid[i + m][j + n][0]] != 0 ) goto ERROR;
+					buffer[sud->grid[i + m][j + n][0]] = 1;
 				}
 			}
 		}
@@ -151,4 +173,24 @@ int ValidateSudoku( Sudoku* sud ) {
 ERROR:
 	free( buffer );
 	return 1;
+}
+
+int SetCell( Sudoku* sud, int x, int y, int value ) {
+	int bi;
+	int retv = sud->grid[x][y][0];
+	
+	bi = (y / sud->length_of_box) * sud->length_of_box + x / sud->length_of_box;
+
+	//store value in grid
+	sud->grid[x][y][0] = value;
+
+	//store value in contains
+	sud->contains[CONTAINS_COL][x][value] = 1;
+	sud->contains[CONTAINS_ROW][y][value] = 1;
+	sud->contains[CONTAINS_BOX][bi][value] = 1;
+
+	//remove other cells possibility for value
+
+
+	return retv;
 }

@@ -1,4 +1,4 @@
-﻿namespace GUI {
+﻿namespace Sudoku {
     partial class ParallelisierungsForm {
         /// <summary>
         /// Required designer variable.
