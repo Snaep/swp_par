@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace Sudoku {
+namespace GUI {
     public partial class StrategieForm : Form {
         public StrategieForm() {
             InitializeComponent();
