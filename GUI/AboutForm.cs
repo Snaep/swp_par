@@ -13,10 +13,5 @@ namespace GUI {
         public AboutForm() {
             InitializeComponent();
         }
-
-        private void AboutForm_Paint( object sender, PaintEventArgs e ) {
-            Rectangle r = new Rectangle(this.Width / 4, 0, this.Width / 2, this.Width / 2);
-            //e.Graphics.DrawImage( someimage, r );
-        }
     }
 }
