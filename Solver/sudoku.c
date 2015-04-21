@@ -191,9 +191,9 @@ int Sudoku_SetCell( Sudoku* sud, unsigned int x, unsigned int y, unsigned int va
 	memset( &sud->grid[y][x][1], CELL_IMPOSSIBLE, sizeof( int ) * sud->length );
 
 	//store value in contains
-	sud->contains[CONTAINS_COL][x][value] = 1;
-	sud->contains[CONTAINS_ROW][y][value] = 1;
-	sud->contains[CONTAINS_BOX][bi][value] = 1;
+	sud->contains[CONTAINS_COL][x][value] = TRUE;
+	sud->contains[CONTAINS_ROW][y][value] = TRUE;
+	sud->contains[CONTAINS_BOX][bi][value] = TRUE;
 
 	//remove other cells possibility for value
 	//col / row

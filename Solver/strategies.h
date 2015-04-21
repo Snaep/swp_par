@@ -14,4 +14,7 @@
 
 //checks if cell has only 1 possibility left and sets the value in grid
 //returns amount of changed cells  (0,1)
-int Strategy_OnePossibility( Sudoku* sud, int x, int y );
+int Strategy_SinglePossibility( Sudoku* sud, int x, int y );
+int Strategy_MissingCol( Sudoku* sud, int x );
+int Strategy_MissingRow( Sudoku* sud, int y );
+int Strategy_MissingBox( Sudoku* sud, int x, int y );

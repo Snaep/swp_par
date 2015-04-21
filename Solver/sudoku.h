@@ -4,6 +4,7 @@
 
 #define CELL_POSSIBLE 1
 #define CELL_IMPOSSIBLE 0
+#define CELL_VALUE 0
 
 #define CONTAINS_ROW 0
 #define CONTAINS_COL 1

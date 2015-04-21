@@ -24,3 +24,6 @@
 
 #define E_UNKNWON (-1)
 #define S_FAIL E_UNKNWON
+
+#define TRUE 1
+#define FALSE 0
