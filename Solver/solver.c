@@ -1,5 +1,7 @@
 #include "solver.h"
 
+
+//hallo marcü
 int SolveSequential( Sudoku* sud, unsigned int strategies ) {
 	int x, y, i;
 	int changes;
@@ -29,7 +31,6 @@ int SolveSequential( Sudoku* sud, unsigned int strategies ) {
 				}
 			}
 		}
-
 
 	} while( changes != 0 );
 
