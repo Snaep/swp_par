@@ -55,7 +55,8 @@ Sudoku* Sudoku_Parse( char* filepath, char delimiter ) {
 		for( j = 0; j < sud->length; j++ ) {
 			sud->grid[i][j] = ( int* ) malloc( ( 1 + sud->length ) * sizeof( int* ) ); //content + n possibilities
 			if( sud->grid[i][j] == NULL ) goto CLEANUP;
-			memset( sud->grid[i][j], CELL_POSSIBLE, sizeof( int ) * ( sud->length + 1 ) );
+			sud->grid[i][j][0] = 0;
+			memset( &sud->grid[i][j][1], CELL_POSSIBLE, sizeof( int ) * ( sud->length ) );
 		}
 	}
 
