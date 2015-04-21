@@ -3,7 +3,7 @@
 #include <stdio.h>
 
 
-void ParameterSet_parse( TCHAR** argv, ParameterSet* dest ) {
+void ParameterSet_Parse( TCHAR** argv, ParameterSet* dest ) {
 	unsigned int i, j;
 	if( dest == NULL ) return;
 	

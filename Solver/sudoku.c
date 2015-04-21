@@ -80,7 +80,7 @@ Sudoku* Sudoku_Parse( char* filepath, char delimiter ) {
 	for( i = 0; file[i] != ENDOFSTRING; i++ ) {
 		//if current tchar is delimiter, finish cell
 		if( file[i] == delimiter ) {
-			SetCell( sud, cellindex++, rowindex, cellvalue );
+			Sudoku_SetCell( sud, cellindex++, rowindex, cellvalue );
 			if( cellindex == sud->length ) {
 				cellindex = 0;
 				//if no. of rows == no. of cols + 1 end parsing
@@ -126,12 +126,12 @@ END:
 	return sud;
 }
 
-int ValidateSudoku( Sudoku* sud ) {
+int Sudoku_Validate( Sudoku* sud ) {
 	int i, j, m, n;
 	int* buffer;
 
 	buffer = malloc( sizeof( int ) * sud->length + sizeof( int ) );
-	if( buffer == NULL ) return 1;
+	if( buffer == NULL ) return S_FAIL;
 
 	//test all rows / cols / boxes
 	for( i = 0; i < sud->length; i++ ) {
@@ -140,7 +140,7 @@ int ValidateSudoku( Sudoku* sud ) {
 		memset( buffer, 0, sizeof( int ) * sud->length );
 		for( j = 0; j < sud->length; j++ ) {
 			if( sud->grid[i][j] == 0 ) goto ERROR; //if cell is empty return error
-			if( buffer[sud->grid[i][j] != 0] ) goto ERROR; //if previous cell contains value return error
+			if( buffer[sud->grid[i][j] != 0] ) goto ERROR; //if value is duplicate return error
 			buffer[sud->grid[i][j][0]] = 1; //store cell value
 		}
 
@@ -148,7 +148,7 @@ int ValidateSudoku( Sudoku* sud ) {
 		memset( buffer, 0, sizeof( int ) * sud->length );
 		for( j = 0; j < sud->length; j++ ) {
 			if( sud->grid[j][i] == 0 ) goto ERROR; //if cell is empty return error
-			if( buffer[sud->grid[j][i] != 0] ) goto ERROR; //if previous cell contains value return error
+			if( buffer[sud->grid[j][i] != 0] ) goto ERROR; //if value is duplicate return error
 			buffer[sud->grid[j][i][0]] = 1; //store cell value
 		}
 	}
@@ -156,33 +156,39 @@ int ValidateSudoku( Sudoku* sud ) {
 
 	//test box
 	memset( buffer, 0, sizeof( int ) * sud->length );
+
+	//for all box areas
 	for( i = 0; i < sud->length; i += sud->length_of_box ) {
 		for( j = 0; j < sud->length; j += sud->length_of_box ) {
 
 			for( m = 0; m < sud->length_of_box; m++ ) {
 				for( n = 0; n < sud->length_of_box; n++ ) {
-					if( buffer[sud->grid[i + m][j + n][0]] != 0 ) goto ERROR;
-					buffer[sud->grid[i + m][j + n][0]] = 1;
+					//if cell empty already tested above
+					if( buffer[sud->grid[i + m][j + n][0]] != 0 ) goto ERROR; //if value is duplicate return error
+					buffer[sud->grid[i + m][j + n][0]] = 1;//store value
 				}
 			}
 		}
 	}
 
 	free( buffer );
-	return 0;
+	return S_OK;
 ERROR:
 	free( buffer );
-	return 1;
+	return S_FAIL;
 }
 
-int SetCell( Sudoku* sud, int x, int y, int value ) {
-	int bi;
-	int retv = sud->grid[x][y][0];
+int Sudoku_SetCell( Sudoku* sud, unsigned int x, unsigned int y, unsigned int value ) {
+	unsigned int bi, i, j;
+	if( sud->grid[y][x][0] != 0 ) return S_FAIL;
 	
 	bi = (y / sud->length_of_box) * sud->length_of_box + x / sud->length_of_box;
 
 	//store value in grid
-	sud->grid[x][y][0] = value;
+	sud->grid[y][x][0] = value;
+
+	//set all other values to impossible
+	memset( &sud->grid[y][x][1], CELL_IMPOSSIBLE, sizeof( int ) * sud->length );
 
 	//store value in contains
 	sud->contains[CONTAINS_COL][x][value] = 1;
@@ -190,7 +196,25 @@ int SetCell( Sudoku* sud, int x, int y, int value ) {
 	sud->contains[CONTAINS_BOX][bi][value] = 1;
 
 	//remove other cells possibility for value
+	//col / row
+	for( i = 0; i < sud->length; i++ ) {
+		sud->grid[y][i][value] = CELL_IMPOSSIBLE;
+		sud->grid[i][x][value] = CELL_IMPOSSIBLE;
+	}
 
+	//box
 
-	return retv;
+	//determine box start indices
+	x -= ( x % sud->length_of_box );
+	y -= ( y % sud->length_of_box );
+
+	//invalidate possibility
+	for( j = y; j < y + sud->length_of_box; j++ ) {
+		for( i = x; i < x + sud->length_of_box; i++ ) {
+			sud->grid[j][i][value] = CELL_IMPOSSIBLE;
+		}
+	}
+
+	//return S_OK
+	return S_OK;
 }

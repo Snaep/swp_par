@@ -28,9 +28,10 @@ Sudoku* Sudoku_Parse( TCHAR* filepath, TCHAR delimiter );
 
 //returns 0: sudoku is solved and valid
 //returns 1: sudoku in solved incorrectly or incompletly
-int ValidateSudoku( Sudoku* sud );
+int Sudoku_Validate( Sudoku* sud );
 
 //Sets Cell to given value
 //adds cell value to contains
-//return previous cell value
-int SetCell( Sudoku* sud, int x, int y, int value );
+//return S_FAIL if cell is not empty
+//does not validate cell against other
+int Sudoku_SetCell( Sudoku* sud, unsigned int x, unsigned int y, unsigned int value );

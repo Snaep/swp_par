@@ -14,4 +14,4 @@ typedef struct {
 
 } ParameterSet;
 
-void ParameterSet_parse( TCHAR** argv, ParameterSet* dest );
+void ParameterSet_Parse( TCHAR** argv, ParameterSet* dest );
