@@ -6,6 +6,8 @@ int SolveSequential( Sudoku* sud, int( **strategies )( Sudoku* grid, int x, int 
 	
 	do {
 		changes = 0;
+
+		//Local operations
 		for( y = 0; y < sud->length; y++ ) {
 			for( x = 0; x < sud->length; x++ ) {
 				//if cell is empty(0)
@@ -26,6 +28,11 @@ int SolveSequential( Sudoku* sud, int( **strategies )( Sudoku* grid, int x, int 
 				}
 			}
 		}
+
+		//Global operationen
+
+		//Area opearations
+
 	} while( changes != 0 );
 
 	//return 0

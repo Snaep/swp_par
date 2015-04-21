@@ -5,7 +5,7 @@
 
 typedef struct {
 
-	Strategy* strategies;
+	unsigned int strategies;
 	unsigned int solver;
 
 	TCHAR filepath[512];
@@ -14,4 +14,4 @@ typedef struct {
 
 } ParameterSet;
 
-void ParameterSet_parse( unsigned int argc, TCHAR** argv, ParameterSet* dest );
+void ParameterSet_parse( TCHAR** argv, ParameterSet* dest );

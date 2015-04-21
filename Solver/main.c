@@ -10,9 +10,9 @@ int _tmain( unsigned int argc, TCHAR** argv ) {
 	
 	memset( &params, 0, sizeof( ParameterSet ) );
 
-	ParameterSet_parse( argc, argv, &params );
+	ParameterSet_parse( argv, &params );
 
-	if( params.strategies == NULL || params.strategies[0] == NULL ) {
+	if( params.strategies == 0 ) {
 		_tprintf( _T( "no strategies detected.\n" ) );
 		_NOTIFYEXIT
 		return 1;
