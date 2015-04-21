@@ -63,6 +63,30 @@ namespace GUI {
             return new Sudoku( lgrid );
         }
 
+        internal static Sudoku Parse( string p1, string p2 ) {
+            Cell[][] lgrid = null;
+            int i = 0;
+
+            string[] lines = p1.Split( new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries );
+            if( lines.Length <= 2 ) return null;
+
+            foreach( string line in lines ) {
+                string[] contents = line.Split( new string[] { p2 }, StringSplitOptions.None );
+                Cell[] cells = new Cell[contents.Length - 1];
+                for( int j = 0; j < cells.Length; j++ ) {
+                    string value = contents[j];
+                    if( value == "" ) value = null;
+                    cells[j] = new Cell( value, true );
+                }
+                if( lgrid == null ) lgrid = new Cell[cells.Length][];
+
+                if( cells.Length == lgrid.Length ) lgrid[i++] = cells;
+                else return null;
+            }
+
+            return new Sudoku( lgrid );
+        }
+
         private void CreateResources() {
             this.pThickLine = new System.Drawing.Pen( System.Drawing.Color.Black, 2 );
             this.fPreSetCell = new System.Drawing.Font( "Consolas", 14, System.Drawing.FontStyle.Bold );
@@ -177,7 +201,7 @@ namespace GUI {
 
             return img;
         }
-                 
+
     }
 
     class Cell {

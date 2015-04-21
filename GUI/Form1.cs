@@ -68,7 +68,7 @@ namespace GUI {
         #region MenuStrip
         #region MENU
         private void neuGenerierenToolStripMenuItem_Click( object sender, EventArgs e ) {
-            this.sGridPreset = new Sudoku( this.defaultLength );
+            this.sGridPreset = ParserForm.GetGrid();
             this.openFile = null;
             this.PlaceSudoku();
         }
@@ -104,7 +104,14 @@ namespace GUI {
             }
 
             if( sGrid == null ) {
-                MessageBox.Show( "Fehler beim Lesen der Eingabe." );
+
+                switch( MessageBox.Show( "Fehler beim Lesen der Eingabe." + Environment.NewLine + "Eingabe bearbeiten?", "Erkennung fehlgeschlagen", MessageBoxButtons.YesNo, MessageBoxIcon.Question ) ) {
+                case System.Windows.Forms.DialogResult.Yes:
+                    sGrid = ParserForm.GetGrid();
+                    break;
+                default:
+                    break;
+                }
                 return;
             }
 
@@ -224,6 +231,7 @@ namespace GUI {
         #endregion
                                      
         private void PlaceSudoku() {
+            if( this.sGridPreset == null ) return;
             this.pictureBox1.Image = this.sGridPreset.ToImage( 30 );
             this.toolStripTextBox1.Text = this.sGridPreset.Length + "";
             this.RePlaceSudoku();
