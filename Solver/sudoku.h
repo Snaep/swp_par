@@ -20,8 +20,8 @@ typedef struct {
 	//0: col/row/box does not contain value
 	int** contains[3];
 
-	int length;
-	int length_of_box;
+	unsigned int length;
+	unsigned int length_of_box;
 
 } Sudoku;
 

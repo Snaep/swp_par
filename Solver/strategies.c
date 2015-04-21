@@ -1,7 +1,7 @@
 #include "strategies.h"
 
 int Strategy_SinglePossibility( Sudoku* sud, int x, int y ) {
-	int i;
+	unsigned int i;
 	int possibility;
 
 	possibility = 0;
@@ -17,7 +17,7 @@ int Strategy_SinglePossibility( Sudoku* sud, int x, int y ) {
 }
 
 int Strategy_MissingCol( Sudoku* sud, int x ) {
-	int i;
+	unsigned int i;
 	int possibility;
 
 	possibility = 0;
@@ -41,7 +41,7 @@ int Strategy_MissingCol( Sudoku* sud, int x ) {
 	return 0;
 }
 int Strategy_MissingRow( Sudoku* sud, int y ) {
-	int i;
+	unsigned int i;
 	int possibility;
 
 	possibility = 0;
@@ -65,7 +65,7 @@ int Strategy_MissingRow( Sudoku* sud, int y ) {
 	return 0;
 }
 int Strategy_MissingBox( Sudoku* sud, int x, int y ) {
-	int i, j, bi;
+	unsigned int i, j, bi;
 	int possibility;
 
 	bi = ( y / sud->length_of_box ) * sud->length_of_box + x / sud->length_of_box;

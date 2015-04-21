@@ -13,8 +13,8 @@ namespace GUI {
         public Form1() {
             InitializeComponent();
 
-            this.toolStripTextBox1.Text = "9";
-            this.defaultLength = 9;
+            this.toolStripTextBox1.Text = "3";
+            this.defaultLength = 3;
             this.openFile = null;
 
             this.spForm = new StrategieForm();
@@ -131,10 +131,7 @@ namespace GUI {
             if( e.KeyCode == Keys.Enter ) {
                 try {
                     int input = int.Parse( this.toolStripTextBox1.Text );
-                    int sqinp = ( int )Math.Sqrt( input );
-
-                    if( input != sqinp * sqinp ) throw new Exception();
-
+                    
                     this.defaultLength = input;
 
                     this.sGridPreset = new Sudoku( this.defaultLength );
@@ -230,12 +227,12 @@ namespace GUI {
         private void PlaceSudoku() {
             if( this.sGridPreset == null ) return;
             this.pictureBox1.Image = this.sGridPreset.ToImage( 30 );
-            this.toolStripTextBox1.Text = this.sGridPreset.Length + "";
+            this.toolStripTextBox1.Text = ( int )Math.Sqrt( this.sGridPreset.Length ) + "";
             this.RePlaceSudoku();
         }
         private void PlaceSudoku( Sudoku sudoku ) {
             this.pictureBox1.Image = sudoku.ToImage( 30 );
-            this.toolStripTextBox1.Text = sudoku.Length + "";
+            this.toolStripTextBox1.Text = ( int )Math.Sqrt( sudoku.Length ) + "";
             this.RePlaceSudoku();
         }
 

@@ -15,6 +15,7 @@ namespace GUI {
         private int N;
 
         internal Sudoku( int length ) {
+            length *= length;
             this.grid = new Cell[length][];
             if( this.grid == null ) throw new OutOfMemoryException();
 
