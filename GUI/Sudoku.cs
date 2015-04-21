@@ -63,15 +63,17 @@ namespace GUI {
             return new Sudoku( lgrid );
         }
 
+        readonly int[] quadrate = new int[] {2, 4, 9, 16, 25, 36, 49, 64, 81, 100};
         internal static Sudoku Parse( string p1, string p2 ) {
             Cell[][] lgrid = null;
             int i = 0;
 
             string[] lines = p1.Split( new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries );
             if( lines.Length <= 2 ) return null;
-
+                          
             foreach( string line in lines ) {
                 string[] contents = line.Split( new string[] { p2 }, StringSplitOptions.None );
+                int length = contents.Length;
                 Cell[] cells = new Cell[contents.Length - 1];
                 for( int j = 0; j < cells.Length; j++ ) {
                     string value = contents[j];

@@ -110,9 +110,8 @@ namespace GUI {
                     sGrid = ParserForm.GetGrid();
                     break;
                 default:
-                    break;
+                    return;
                 }
-                return;
             }
 
             this.sGridPreset = sGrid;
@@ -225,9 +224,7 @@ namespace GUI {
         }
 
         #endregion
-
-
-
+                                            
         #endregion
                                      
         private void PlaceSudoku() {
