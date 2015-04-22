@@ -15,8 +15,9 @@ int Strategy_SinglePossibility(Sudoku* sud, int x, int y) {
 			possibility = i;
 		}
 	}
+	if (possibility != 0)//if only one number is possible 
+		Sudoku_SetCell(sud, x, y, possibility);//set number
 
-	Sudoku_SetCell(sud, x, y, possibility);//set possible numbers 
 	return 1;
 }
 //Function to test for missing numbers in column
@@ -28,14 +29,14 @@ int Strategy_MissingCol(Sudoku* sud, int x) {
 	possibility = 0;
 	for (i = 1; i <= sud->length; i++) {//cycle trought all numbers per cell 
 		if (sud->contains[CONTAINS_COL][x][i] == FALSE) {
-			if (possibility != 0) return 0;//if none number possible return 
+			if (possibility != 0) return 0;//if more than one number possible return 
 			possibility = i;	//else save number as possible
 		}
 	}
 
 	for (i = 0; i < sud->length; i++) {
 		if (sud->grid[i][x][CELL_VALUE] == 0) {//search empty cells
-			Sudoku_SetCell(sud, x, i, possibility);//set possible numbers  
+			Sudoku_SetCell(sud, x, i, possibility);//set number
 			return 1;
 		}
 	}
@@ -54,14 +55,14 @@ int Strategy_MissingRow(Sudoku* sud, int y) {
 	possibility = 0;
 	for (i = 1; i <= sud->length; i++) {//cycle trought row 
 		if (sud->contains[CONTAINS_ROW][y][i] == FALSE) {//search for possible numbers 
-			if (possibility != 0) return 0;//if no number possible return 
+			if (possibility != 0) return 0;//if more than one number possible return 
 			possibility = i;//else save number as possible
 		}
 	}
 
 	for (i = 0; i < sud->length; i++) {
 		if (sud->grid[y][i][CELL_VALUE] == 0) {//cycle trought possible numbers 
-			Sudoku_SetCell(sud, i, y, possibility);//fill numbers in 
+			Sudoku_SetCell(sud, i, y, possibility);//set number
 			return 1;
 		}
 	}
@@ -82,7 +83,7 @@ int Strategy_MissingBox(Sudoku* sud, int x, int y) {
 	possibility = 0;
 	for (i = 1; i <= sud->length; i++) {//search in x 
 		if (sud->contains[CONTAINS_BOX][bi][i] == FALSE) {//cycle trought possible numbers
-			if (possibility != 0) return 0;//if no possible nuimbers found return 
+			if (possibility != 0) return 0;//if more than one possible numbers found return 
 			possibility = i;//else save number as possible
 		}
 	}
@@ -90,7 +91,7 @@ int Strategy_MissingBox(Sudoku* sud, int x, int y) {
 	for (j = y; j < y + sud->length_of_box; j++) {//search in y 
 		for (i = x; i < x + sud->length_of_box; i++) {//cycle trought numbers
 			if (sud->grid[j][i][CELL_VALUE] == 0) {//test if number is possible
-				Sudoku_SetCell(sud, i, j, possibility);//set numbers as possible
+				Sudoku_SetCell(sud, i, j, possibility);//set number
 				return 1;
 			}
 		}

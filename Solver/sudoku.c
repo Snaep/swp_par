@@ -21,7 +21,7 @@ TCHAR* ReadAllBytes( TCHAR * file ) {
 
 	return retv;
 }
-
+//Sets number in cell
 Sudoku* Sudoku_Parse( char* filepath, char delimiter ) {
 	Sudoku* sud;
 	TCHAR* file;
