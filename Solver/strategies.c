@@ -46,21 +46,22 @@ int Strategy_MissingCol(Sudoku* sud, int x) {
 	return 0;
 }
 //Function to test for missing numbers in Row
+//Gets Sudoku and Row to search in 
 int Strategy_MissingRow(Sudoku* sud, int y) {
 	unsigned int i;
 	int possibility;
 
 	possibility = 0;
-	for (i = 1; i <= sud->length; i++) {
-		if (sud->contains[CONTAINS_ROW][y][i] == FALSE) {
-			if (possibility != 0) return 0;
-			possibility = i;
+	for (i = 1; i <= sud->length; i++) {//cycle trought row 
+		if (sud->contains[CONTAINS_ROW][y][i] == FALSE) {//search for possible numbers 
+			if (possibility != 0) return 0;//if no number possible return 
+			possibility = i;//else save number as possible
 		}
 	}
 
 	for (i = 0; i < sud->length; i++) {
-		if (sud->grid[y][i][CELL_VALUE] == 0) {
-			Sudoku_SetCell(sud, i, y, possibility);
+		if (sud->grid[y][i][CELL_VALUE] == 0) {//cycle trought possible numbers 
+			Sudoku_SetCell(sud, i, y, possibility);//fill numbers in 
 			return 1;
 		}
 	}
@@ -70,24 +71,26 @@ int Strategy_MissingRow(Sudoku* sud, int y) {
 
 	return 0;
 }
+//Function to find missing numbers in Box
+//Gets Sudoku and x,y Pos
 int Strategy_MissingBox(Sudoku* sud, int x, int y) {
 	unsigned int i, j, bi;
 	int possibility;
 
-	bi = (y / sud->length_of_box) * sud->length_of_box + x / sud->length_of_box;
+	bi = (y / sud->length_of_box) * sud->length_of_box + x / sud->length_of_box;//get position on top left 
 
 	possibility = 0;
-	for (i = 1; i <= sud->length; i++) {
-		if (sud->contains[CONTAINS_BOX][bi][i] == FALSE) {
-			if (possibility != 0) return 0;
-			possibility = i;
+	for (i = 1; i <= sud->length; i++) {//search in x 
+		if (sud->contains[CONTAINS_BOX][bi][i] == FALSE) {//cycle trought possible numbers
+			if (possibility != 0) return 0;//if no possible nuimbers found return 
+			possibility = i;//else save number as possible
 		}
 	}
 
-	for (j = y; j < y + sud->length_of_box; j++) {
-		for (i = x; i < x + sud->length_of_box; i++) {
-			if (sud->grid[j][i][CELL_VALUE] == 0) {
-				Sudoku_SetCell(sud, i, j, possibility);
+	for (j = y; j < y + sud->length_of_box; j++) {//search in y 
+		for (i = x; i < x + sud->length_of_box; i++) {//cycle trought numbers
+			if (sud->grid[j][i][CELL_VALUE] == 0) {//test if number is possible
+				Sudoku_SetCell(sud, i, j, possibility);//set numbers as possible
 				return 1;
 			}
 		}
