@@ -1,12 +1,13 @@
 #include "solver.h"
 
 
-//hallo marcü
+//Solver for Sudoku
+//Gets Sudoku and the strategies to use
 int SolveSequential( Sudoku* sud, unsigned int strategies ) {
 	int x, y, i;
 	int changes;
 	
-	do {
+	do {//do while no error in process 
 		changes = 0;
 
 		if( (strategies & STRAT_SINGLE_POSSIBILITY) != 0 ) {
