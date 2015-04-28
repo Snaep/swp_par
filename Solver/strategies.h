@@ -24,7 +24,7 @@ int Strategy_MissingCol ( Sudoku* sud, int x );
 int Strategy_MissingRow ( Sudoku* sud, int y );
 int Strategy_MissingBox ( Sudoku* sud, int x, int y );
 /*https://www.hochschule-trier.de/uploads/tx_rfttheses/Eckart_Sussenburger_-_Loesungs-_und_Generierungsalgorithmen_fuer_Sudoku.pdf */
-int logic_solve ( Sudoku* sud );
+
 //checks for single possible number in row
 int rule1 ( Sudoku* sud );
 //checks for single possilbe number in col
