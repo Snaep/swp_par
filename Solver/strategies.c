@@ -50,7 +50,7 @@ int Strategy_MissingCol ( Sudoku* sud, int x )
 	}
 
 	_tprintf ( _T ( "reached unreachable statement\r\nModule: %s\r\nLine:%i\r\nDescription:\
-																																																																																																		  \r\nCol is missing 1 value but no cell is empty\r\n" ), __FILE__, __LINE__ );
+																																																																																																												  \r\nCol is missing 1 value but no cell is empty\r\n" ), __FILE__, __LINE__ );
 
 	return 0;
 }
@@ -81,7 +81,7 @@ int Strategy_MissingRow ( Sudoku* sud, int y )
 	}
 
 	_tprintf ( _T ( "reached unreachable statement\r\nModule: %s\r\nLine:%i\r\nDescription:\
-																																																																																																		  \r\nRow is missing 1 value but no cell is empty\r\n" ), __FILE__, __LINE__ );
+																																																																																																												  \r\nRow is missing 1 value but no cell is empty\r\n" ), __FILE__, __LINE__ );
 
 	return 0;
 }
@@ -117,7 +117,7 @@ int Strategy_MissingBox ( Sudoku* sud, int x, int y )
 	}
 
 	_tprintf ( _T ( "reached unreachable statement\r\nModule: %s\r\nLine:%i\r\nDescription:\
-																																																																																																		  				  \r\nBox is missing 1 value but no cell is empty\r\n" ), __FILE__, __LINE__ );
+																																																																																																												  				  \r\nBox is missing 1 value but no cell is empty\r\n" ), __FILE__, __LINE__ );
 
 	return 0;
 }
@@ -169,43 +169,38 @@ int logic_solve ( Sudoku* sud )
 		}
 	}
 }
-int rule1 ( Sudoku* sud )
+int rule1 ( Sudoku* sud, int x, int y )
 {
-	int iX, iY;
+
 	int z;
 	int i;
 
-	for ( iX = 0; iX < sud->length; iX++ )//loop trought all cells in x direction
+	for ( x = 0; x < sud->length; x++ )//loop trought all cells in x direction
 	{
-		for ( iY = 0; iY < sud->length; iY++ )//loop trought all cells in y direction
+		for ( y = 0; y < sud->length; y++ )//loop trought all cells in y direction
 		{
-			if ( sud->grid[iY][iX][0] == 0 )//Search only in empty cells
+			if ( sud->grid[y][x][0] == 0 )//Search only in empty cells
 			{
 				for ( z = 1; z < sud->length; z++ )//loop trought possible candidates
 				{
-					if ( sud->grid[iY][iX][z + 1] )//check if z is candidate for cell[iX][iY]
+					if ( sud->grid[y][x][z + 1] )//check if z is candidate for cell[iX][iY]
 					{
 						for ( i = 0; i < sud->length; i++ )
 						{
-							if ( sud->grid[iY][i][z + 1] )
+							if ( sud->grid[y][i][z + 1] )
 							{
 								return 0;//Retrun if there are more than one possible position for z in row 
 							}
 						}
 					}
 				}
-				sud->grid[iY][iX][0] = z; //set z as cell value for cell[iX][iY]
-
-				for ( int i = 0; i < sud->length; i++ )//Set all candiates to zero (disable all)
-				{
-					sud->grid[iY][iX][i + 1] = 0;
-				}
+				Sudoku_SetCell ( sud, x, y, z );
 			}
 		}
 	}
 }
 
-int rule2 ( Sudoku* sud )
+int rule2 ( Sudoku* sud, int x, int y )
 {
 	int iX, iY;
 	int z;
@@ -230,18 +225,13 @@ int rule2 ( Sudoku* sud )
 						}
 					}
 				}
-				sud->grid[iY][iX][0] = z; //set z as cell value for cell[iX][iY]
-
-				for ( int i = 0; i < sud->length; i++ )//Set all candiates to zero (disable all)
-				{
-					sud->grid[iY][iX][i + 1] = 0;
-				}
+				Sudoku_SetCell ( sud, iX, iY, z );
 			}
 		}
 	}
 }
 
-int rule3 ( Sudoku* sud )
+int rule3 ( Sudoku* sud, int x, int y )
 {
 	int iX, iY;
 	int z;
@@ -273,12 +263,24 @@ int rule3 ( Sudoku* sud )
 						}
 					}
 				}
-				sud->grid[iY][iX][0] = z; //set z as cell value for cell[iX][iY]
 
-				for ( int i = 0; i < sud->length; i++ )//Set all candiates to zero (disable all)
-				{
-					sud->grid[iY][iX][i + 1] = 0;
-				}
+				Sudoku_SetCell ( sud, iX, iY, z );
+			}
+		}
+	}
+}
+int rule4 ( Sudoku* sud, int x, int y )
+{
+	int iX, iY;
+
+	for ( iX = 0; iX < sud->length; iX++ )
+	{
+		for ( iY = 0; iY < sud->length; iY++ )
+		{
+			for ( int i = 0; i < sud->length; i++ )
+			{
+				for ( )
+					sud->contains[i][][];
 			}
 		}
 	}

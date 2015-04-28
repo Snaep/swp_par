@@ -15,7 +15,7 @@
 //define number of rules to solve Sudoku
 #define RULE_CNT 6
 
-int ( *rules[RULE_CNT] )( Sudoku* );
+int ( *rules[RULE_CNT] )( Sudoku*,int x, int y );
 
 //checks if cell has only 1 possibility left and sets the value in grid
 //returns amount of changed cells  (0,1)
@@ -23,7 +23,7 @@ int Strategy_SinglePossibility ( Sudoku* sud, int x, int y );//Equals Naked Sing
 int Strategy_MissingCol ( Sudoku* sud, int x );
 int Strategy_MissingRow ( Sudoku* sud, int y );
 int Strategy_MissingBox ( Sudoku* sud, int x, int y );
-
+/*https://www.hochschule-trier.de/uploads/tx_rfttheses/Eckart_Sussenburger_-_Loesungs-_und_Generierungsalgorithmen_fuer_Sudoku.pdf */
 int logic_solve ( Sudoku* sud );
 //checks for single possible number in row
 int rule1 ( Sudoku* sud );
