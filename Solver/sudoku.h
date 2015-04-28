@@ -11,6 +11,7 @@
 #define CONTAINS_BOX 2
 #define NUM_ELEMENTS 3
 
+#define SUDOKU_BUFFER_BYTEPERSLOT 16
 
 typedef struct {
 
@@ -26,9 +27,9 @@ typedef struct {
 	unsigned int length;
 	unsigned int length_of_box;
 
-	//buffer has length slots that can be used as buffer 
-	//during solving
-	int* buffer;
+	//buffer to store values during solving
+	//size equals SUDOKU_BUFFER_BYTEPERSLOT * length
+	unsigned char* buffer;
 
 } Sudoku;
 

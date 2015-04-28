@@ -98,7 +98,7 @@ Sudoku* Sudoku_Parse( char* filepath, char delimiter ) {
 		}
 	}
 
-	sud->buffer = ( int* ) malloc( sizeof( int ) * sud->length );
+	sud->buffer = ( int* ) malloc( SUDOKU_BUFFER_BYTEPERSLOT * sud->length );
 	if( sud->buffer == NULL ) goto CLEANUP;
 
 	//skip cleanup
