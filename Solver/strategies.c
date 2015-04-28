@@ -50,7 +50,7 @@ int Strategy_MissingCol ( Sudoku* sud, int x )
 	}
 
 	_tprintf ( _T ( "reached unreachable statement\r\nModule: %s\r\nLine:%i\r\nDescription:\
-																																																					  \r\nCol is missing 1 value but no cell is empty\r\n" ), __FILE__, __LINE__ );
+																																																																														  \r\nCol is missing 1 value but no cell is empty\r\n" ), __FILE__, __LINE__ );
 
 	return 0;
 }
@@ -81,7 +81,7 @@ int Strategy_MissingRow ( Sudoku* sud, int y )
 	}
 
 	_tprintf ( _T ( "reached unreachable statement\r\nModule: %s\r\nLine:%i\r\nDescription:\
-																																																					  \r\nRow is missing 1 value but no cell is empty\r\n" ), __FILE__, __LINE__ );
+																																																																														  \r\nRow is missing 1 value but no cell is empty\r\n" ), __FILE__, __LINE__ );
 
 	return 0;
 }
@@ -117,12 +117,12 @@ int Strategy_MissingBox ( Sudoku* sud, int x, int y )
 	}
 
 	_tprintf ( _T ( "reached unreachable statement\r\nModule: %s\r\nLine:%i\r\nDescription:\
-																																																					  				  \r\nBox is missing 1 value but no cell is empty\r\n" ), __FILE__, __LINE__ );
+																																																																														  				  \r\nBox is missing 1 value but no cell is empty\r\n" ), __FILE__, __LINE__ );
 
 	return 0;
 }
 
-Sudoku logic_solve ( Sudoku* sud )
+int logic_solve ( Sudoku* sud )
 {
 	int change = 1;
 	int wert = 0;
@@ -130,7 +130,6 @@ Sudoku logic_solve ( Sudoku* sud )
 	int i;
 	int empty;
 	int rc;
-	Sudoku solved;
 
 	rules[0] = rule1;
 	rules[1] = rule2;
@@ -139,17 +138,11 @@ Sudoku logic_solve ( Sudoku* sud )
 	rules[4] = rule5;
 	rules[5] = rule6;
 
-
-
-
-
-
-
 	while ( change )
 	{
 		change = 0;
 		empty = 0;
-		for ( iX = 0; iX < sud->length; iX++ )
+		for ( iX = 0; iX < sud->length; iX++ )//count empty cells
 		{
 			for ( iY = 0; iY < sud->length; iY++ )
 			{
@@ -159,20 +152,55 @@ Sudoku logic_solve ( Sudoku* sud )
 				}
 			}
 		}
-		if ( empty == 0 )
+		if ( empty == 0 )//If none empty return 
 		{
-			return solved;
+			return 1;//Solved
 		}
 		for ( i = 0; i < RULE_CNT; i++ )
 		{
 			if ( !change )
 			{
-				rC = rules[i];
+				rc = rules[i] ( sud );
 			}
 		}
 		if ( !change )
 		{
-			//Not solvable
+			return 0;//Not solvable
+		}
+	}
+}
+int rule1 ( Sudoku* sud )
+{
+	int iX, iY;
+	int z;
+	int i;
+
+	for ( iX = 0; iX < sud->length; iX++ )//loop trought all cells in x direction
+	{												
+		for ( iY = 0; iY < sud->length; iY++ )//loop trought all cells in y direction
+		{
+			if ( sud->grid[iY][iX][0] == 0 )//Search only in empty cells
+			{
+				for ( z = 1; z < sud->length; z++ )//loop trought possible candidates
+				{
+					if ( sud->grid[iY][iX][z + 1] )//check if z is candidate for cell[iX][iY]
+					{
+						for ( i = 0; i < sud->length; i++ )
+						{
+							if ( sud->grid[iY][i][z + 1] )
+							{
+								return 0;//Retrun if there are more than one possible position for z ijn row 
+							}
+						}
+					}
+				}
+				sud->grid[iY][iX][0] = z; //set z as cell value for cell[iX][iY]
+
+				for ( int i = 0; i < sud->length; i++ )//Set all candiates to zero (disable all)
+				{
+					sud->grid[iY][iX][i + 1] = 0;
+				}
+			}
 		}
 	}
 }

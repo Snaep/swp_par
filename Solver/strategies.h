@@ -15,7 +15,7 @@
 //define number of rules to solve Sudoku
 #define RULE_CNT 6
 
-int ( *rules[RULE_CNT] )( Sudoku );
+int ( *rules[RULE_CNT] )( Sudoku* );
 
 //checks if cell has only 1 possibility left and sets the value in grid
 //returns amount of changed cells  (0,1)
@@ -24,9 +24,12 @@ int Strategy_MissingCol ( Sudoku* sud, int x );
 int Strategy_MissingRow ( Sudoku* sud, int y );
 int Strategy_MissingBox ( Sudoku* sud, int x, int y );
 
-Sudoku logic_solve ( Sudoku* sud );
+int logic_solve ( Sudoku* sud );
+//checks for single possible number in row
 int rule1 ( Sudoku* sud );
+//checks for single possilbe number in col
 int rule2 ( Sudoku* sud );
+
 int rule3 ( Sudoku* sud );
 int rule4 ( Sudoku* sud );
 int rule5 ( Sudoku* sud );
