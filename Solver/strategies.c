@@ -3,102 +3,176 @@
 
 //Function to test for possible Numbers in cell
 //Gets Sudoku, x and y position
-int Strategy_SinglePossibility(Sudoku* sud, int x, int y) {
+int Strategy_SinglePossibility ( Sudoku* sud, int x, int y )
+{
 	unsigned int i;
 	int possibility;
 
 	possibility = 0;
 
-	for (i = 1; i <= sud->length; i++) {//go throught all possible Numbers from 1 to N
-		if (sud->grid[y][x][i] == CELL_POSSIBLE) {
-			if (possibility != 0) return 0;
+	for ( i = 1; i <= sud->length; i++ )
+	{//go throught all possible Numbers from 1 to N
+		if ( sud->grid[y][x][i] == CELL_POSSIBLE )
+		{
+			if ( possibility != 0 ) return 0;
 			possibility = i;
 		}
 	}
-	if (possibility != 0)//if only one number is possible 
-		Sudoku_SetCell(sud, x, y, possibility);//set number
+	if ( possibility != 0 )//if only one number is possible 
+		Sudoku_SetCell ( sud, x, y, possibility );//set number
 
 	return 1;
 }
 //Function to test for missing numbers in column
 //Gets Sudoku and Column to search in
-int Strategy_MissingCol(Sudoku* sud, int x) {
+int Strategy_MissingCol ( Sudoku* sud, int x )
+{
 	unsigned int i;
 	int possibility;
 
 	possibility = 0;
-	for (i = 1; i <= sud->length; i++) {//cycle trought all numbers per cell 
-		if (sud->contains[CONTAINS_COL][x][i] == FALSE) {
-			if (possibility != 0) return 0;//if more than one number possible return 
+	for ( i = 1; i <= sud->length; i++ )
+	{//cycle trought all numbers per cell 
+		if ( sud->contains[CONTAINS_COL][x][i] == FALSE )
+		{
+			if ( possibility != 0 ) return 0;//if more than one number possible return 
 			possibility = i;	//else save number as possible
 		}
 	}
 
-	for (i = 0; i < sud->length; i++) {
-		if (sud->grid[i][x][CELL_VALUE] == 0) {//search empty cells
-			Sudoku_SetCell(sud, x, i, possibility);//set number
+	for ( i = 0; i < sud->length; i++ )
+	{
+		if ( sud->grid[i][x][CELL_VALUE] == 0 )
+		{//search empty cells
+			Sudoku_SetCell ( sud, x, i, possibility );//set number
 			return 1;
 		}
 	}
 
-	_tprintf(_T("reached unreachable statement\r\nModule: %s\r\nLine:%i\r\nDescription:\
-								  \r\nCol is missing 1 value but no cell is empty\r\n"), __FILE__, __LINE__);
+	_tprintf ( _T ( "reached unreachable statement\r\nModule: %s\r\nLine:%i\r\nDescription:\
+																																																					  \r\nCol is missing 1 value but no cell is empty\r\n" ), __FILE__, __LINE__ );
 
 	return 0;
 }
 //Function to test for missing numbers in Row
 //Gets Sudoku and Row to search in 
-int Strategy_MissingRow(Sudoku* sud, int y) {
+int Strategy_MissingRow ( Sudoku* sud, int y )
+{
 	unsigned int i;
 	int possibility;
 
 	possibility = 0;
-	for (i = 1; i <= sud->length; i++) {//cycle trought row 
-		if (sud->contains[CONTAINS_ROW][y][i] == FALSE) {//search for possible numbers 
-			if (possibility != 0) return 0;//if more than one number possible return 
+	for ( i = 1; i <= sud->length; i++ )
+	{//cycle trought row 
+		if ( sud->contains[CONTAINS_ROW][y][i] == FALSE )
+		{//search for possible numbers 
+			if ( possibility != 0 ) return 0;//if more than one number possible return 
 			possibility = i;//else save number as possible
 		}
 	}
 
-	for (i = 0; i < sud->length; i++) {
-		if (sud->grid[y][i][CELL_VALUE] == 0) {//cycle trought possible numbers 
-			Sudoku_SetCell(sud, i, y, possibility);//set number
+	for ( i = 0; i < sud->length; i++ )
+	{
+		if ( sud->grid[y][i][CELL_VALUE] == 0 )
+		{//cycle trought possible numbers 
+			Sudoku_SetCell ( sud, i, y, possibility );//set number
 			return 1;
 		}
 	}
 
-	_tprintf(_T("reached unreachable statement\r\nModule: %s\r\nLine:%i\r\nDescription:\
-								  \r\nRow is missing 1 value but no cell is empty\r\n"), __FILE__, __LINE__);
+	_tprintf ( _T ( "reached unreachable statement\r\nModule: %s\r\nLine:%i\r\nDescription:\
+																																																					  \r\nRow is missing 1 value but no cell is empty\r\n" ), __FILE__, __LINE__ );
 
 	return 0;
 }
 //Function to find missing numbers in Box
 //Gets Sudoku and x,y Pos
-int Strategy_MissingBox(Sudoku* sud, int x, int y) {
+int Strategy_MissingBox ( Sudoku* sud, int x, int y )
+{
 	unsigned int i, j, bi;
 	int possibility;
 
-	bi = (y / sud->length_of_box) * sud->length_of_box + x / sud->length_of_box;//get position on top left 
+	bi = ( y / sud->length_of_box ) * sud->length_of_box + x / sud->length_of_box;//get position on top left 
 
 	possibility = 0;
-	for (i = 1; i <= sud->length; i++) {//search in x 
-		if (sud->contains[CONTAINS_BOX][bi][i] == FALSE) {//cycle trought possible numbers
-			if (possibility != 0) return 0;//if more than one possible numbers found return 
+	for ( i = 1; i <= sud->length; i++ )
+	{//search in x 
+		if ( sud->contains[CONTAINS_BOX][bi][i] == FALSE )
+		{//cycle trought possible numbers
+			if ( possibility != 0 ) return 0;//if more than one possible numbers found return 
 			possibility = i;//else save number as possible
 		}
 	}
 
-	for (j = y; j < y + sud->length_of_box; j++) {//search in y 
-		for (i = x; i < x + sud->length_of_box; i++) {//cycle trought numbers
-			if (sud->grid[j][i][CELL_VALUE] == 0) {//test if number is possible
-				Sudoku_SetCell(sud, i, j, possibility);//set number
+	for ( j = y; j < y + sud->length_of_box; j++ )
+	{//search in y 
+		for ( i = x; i < x + sud->length_of_box; i++ )
+		{//cycle trought numbers
+			if ( sud->grid[j][i][CELL_VALUE] == 0 )
+			{//test if number is possible
+				Sudoku_SetCell ( sud, i, j, possibility );//set number
 				return 1;
 			}
 		}
 	}
 
-	_tprintf(_T("reached unreachable statement\r\nModule: %s\r\nLine:%i\r\nDescription:\
-								  				  \r\nBox is missing 1 value but no cell is empty\r\n"), __FILE__, __LINE__);
+	_tprintf ( _T ( "reached unreachable statement\r\nModule: %s\r\nLine:%i\r\nDescription:\
+																																																					  				  \r\nBox is missing 1 value but no cell is empty\r\n" ), __FILE__, __LINE__ );
 
 	return 0;
+}
+
+Sudoku logic_solve ( Sudoku* sud )
+{
+	int change = 1;
+	int wert = 0;
+	int iX, iY;
+	int i;
+	int empty;
+	int rc;
+	Sudoku solved;
+
+	rules[0] = rule1;
+	rules[1] = rule2;
+	rules[2] = rule3;
+	rules[3] = rule4;
+	rules[4] = rule5;
+	rules[5] = rule6;
+
+
+
+
+
+
+
+	while ( change )
+	{
+		change = 0;
+		empty = 0;
+		for ( iX = 0; iX < sud->length; iX++ )
+		{
+			for ( iY = 0; iY < sud->length; iY++ )
+			{
+				if ( sud->grid[iY][iX][0] == 0 )
+				{
+					empty++;
+				}
+			}
+		}
+		if ( empty == 0 )
+		{
+			return solved;
+		}
+		for ( i = 0; i < RULE_CNT; i++ )
+		{
+			if ( !change )
+			{
+				rC = rules[i];
+			}
+		}
+		if ( !change )
+		{
+			//Not solvable
+		}
+	}
 }

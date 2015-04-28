@@ -9,6 +9,9 @@
 #define CONTAINS_ROW 0
 #define CONTAINS_COL 1
 #define CONTAINS_BOX 2
+#define NUM_ELEMENTS 3
+
+
 typedef struct {
 
 	//[y][x][0] = cellvalue
