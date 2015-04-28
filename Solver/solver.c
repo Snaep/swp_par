@@ -66,11 +66,9 @@ Solver GetSolver ( unsigned int parallelization )
 int logic_solve ( Sudoku* sud )
 {
 	int change = 1;
-	int wert = 0;
 	int x, y;
 	int i;
 	int empty;
-	int rc;
 
 	rules[0] = rule1;
 	rules[1] = rule2;

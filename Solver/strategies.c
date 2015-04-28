@@ -209,6 +209,7 @@ int rule3 ( Sudoku* sud, int x, int y )
 	}
 
 }
+
 int rule4 ( Sudoku* sud, int x, int y )
 {
 	int iX, iY;
@@ -260,4 +261,14 @@ int rule5 ( Sudoku* sud, int x, int y )
 	for ( i = 1; i <= sud->length; i++ ) if ( sud->grid[y][x][i] == CELL_POSSIBLE ) sud->buffer[possible_count++] = i;
 
 
+}
+
+int rule8 ( Sudoku* sud, int x, int y )
+{
+	int box_coord_X, box_coord_Y;//variables to calculate number of box
+
+	box_coord_X = x % sud->length_of_box;
+	box_coord_Y = y % sud->length_of_box;
+
+	
 }

@@ -34,3 +34,4 @@ int rule3 ( Sudoku* sud, int x, int y );
 int rule4 ( Sudoku* sud, int x, int y );
 int rule5 ( Sudoku* sud, int x, int y );
 int rule6 ( Sudoku* sud, int x, int y );
+int rule8 ( Sudoku* sud, int x, int y );//Block line Interactions
