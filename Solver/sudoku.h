@@ -26,6 +26,10 @@ typedef struct {
 	unsigned int length;
 	unsigned int length_of_box;
 
+	//buffer has length slots that can be used as buffer 
+	//during solving
+	int* buffer;
+
 } Sudoku;
 
 Sudoku* Sudoku_Parse( TCHAR* filepath, TCHAR delimiter );
