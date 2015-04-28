@@ -240,29 +240,6 @@ int rule4 ( Sudoku* sud, int x, int y )
 	return 0;
 }
 
-
-/*
-Es wird eine Menge M mit benach-
-barten Elementen mit gleichen Kandidatenlisten gebildet. Die Elemente müssen
-in totaler Nachbarschaft stehen, also jedes Element muss Nachbarelement jedes
-anderen Elementes sein. Sollte es nun genau soviele Elemente in M geben wie
-es Elemente in jeder Kandidatenliste gibt, so folgt daraus dass diese Kandida-
-ten einzig auf die Elemente der Menge M zuzuordnen sind. Alle weiteren totalen
-Nachbarelemente können jedes Element aus den Kandidatenlisten von M von ihrer
-Kandidatenliste streichen
-*/
-int rule5 ( Sudoku* sud, int x, int y )
-{
-	int i;
-	int possible_count;
-
-	//bestimme Anzahl und Möglichkeiten für aktuelle Zelle
-	possible_count = 0;
-	for ( i = 1; i <= sud->length; i++ ) if ( sud->grid[y][x][i] == CELL_POSSIBLE ) sud->buffer[possible_count++] = i;
-
-
-}
-
 int rule8 ( Sudoku* sud, int x, int y )
 {
 	int box_coord_X, box_coord_Y;//variables to calculate number of box
