@@ -90,7 +90,7 @@ int logic_solve ( Sudoku* sud )
 		{
 			if ( !change )
 			{
-				rc = rules[i] ( sud, x, y );
+				change = rules[i] ( sud, x, y );
 			}
 		}
 		if ( !change )
