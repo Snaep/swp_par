@@ -29,7 +29,7 @@ int logic_solve ( Sudoku* sud );
 int rule1 ( Sudoku* sud );
 //checks for single possilbe number in col
 int rule2 ( Sudoku* sud );
-
+//checks for single possible number in each box
 int rule3 ( Sudoku* sud );
 int rule4 ( Sudoku* sud );
 int rule5 ( Sudoku* sud );

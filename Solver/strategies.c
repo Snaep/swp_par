@@ -50,7 +50,7 @@ int Strategy_MissingCol ( Sudoku* sud, int x )
 	}
 
 	_tprintf ( _T ( "reached unreachable statement\r\nModule: %s\r\nLine:%i\r\nDescription:\
-																																																																														  \r\nCol is missing 1 value but no cell is empty\r\n" ), __FILE__, __LINE__ );
+																																																																																																		  \r\nCol is missing 1 value but no cell is empty\r\n" ), __FILE__, __LINE__ );
 
 	return 0;
 }
@@ -81,7 +81,7 @@ int Strategy_MissingRow ( Sudoku* sud, int y )
 	}
 
 	_tprintf ( _T ( "reached unreachable statement\r\nModule: %s\r\nLine:%i\r\nDescription:\
-																																																																														  \r\nRow is missing 1 value but no cell is empty\r\n" ), __FILE__, __LINE__ );
+																																																																																																		  \r\nRow is missing 1 value but no cell is empty\r\n" ), __FILE__, __LINE__ );
 
 	return 0;
 }
@@ -117,7 +117,7 @@ int Strategy_MissingBox ( Sudoku* sud, int x, int y )
 	}
 
 	_tprintf ( _T ( "reached unreachable statement\r\nModule: %s\r\nLine:%i\r\nDescription:\
-																																																																														  				  \r\nBox is missing 1 value but no cell is empty\r\n" ), __FILE__, __LINE__ );
+																																																																																																		  				  \r\nBox is missing 1 value but no cell is empty\r\n" ), __FILE__, __LINE__ );
 
 	return 0;
 }
@@ -176,7 +176,7 @@ int rule1 ( Sudoku* sud )
 	int i;
 
 	for ( iX = 0; iX < sud->length; iX++ )//loop trought all cells in x direction
-	{												
+	{
 		for ( iY = 0; iY < sud->length; iY++ )//loop trought all cells in y direction
 		{
 			if ( sud->grid[iY][iX][0] == 0 )//Search only in empty cells
@@ -226,6 +226,49 @@ int rule2 ( Sudoku* sud )
 							if ( sud->grid[i][iX][z + 1] )
 							{
 								return 0;//Retrun if there are more than one possible position for z in column 
+							}
+						}
+					}
+				}
+				sud->grid[iY][iX][0] = z; //set z as cell value for cell[iX][iY]
+
+				for ( int i = 0; i < sud->length; i++ )//Set all candiates to zero (disable all)
+				{
+					sud->grid[iY][iX][i + 1] = 0;
+				}
+			}
+		}
+	}
+}
+
+int rule3 ( Sudoku* sud )
+{
+	int iX, iY;
+	int z;
+	int i;
+	int box_cnt_X, box_cnt_Y;
+
+	for ( iX = 0; iX < sud->length; iX++ )//loop trought all cells in x direction
+	{
+		for ( iY = 0; iY < sud->length; iY++ )//loop trought all cells in y direction
+		{
+			if ( sud->grid[iY][iX][0] == 0 )//Search only in empty cells
+			{
+				for ( z = 1; z < sud->length; z++ )//loop trought possible candidates
+				{
+					if ( sud->grid[iY][iX][z + 1] )//check if z is candidate for cell[iX][iY]
+					{
+						for ( i = 0; i < sud->length_of_box; i++ )
+						{
+							for ( int j = 0; j < sud->length_of_box; j++ )
+							{
+								box_cnt_X = iX % sud->length_of_box;
+								box_cnt_Y = iY % sud->length_of_box;
+
+								if ( sud->grid[i + ( box_cnt_Y * ( sud->length_of_box - 1 ) )][j + ( box_cnt_X * ( sud->length_of_box - 1 ) )][z + 1] )
+								{
+									return 0;//Retrun if there are more than one possible position for z in column 
+								}
 							}
 						}
 					}
