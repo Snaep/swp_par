@@ -50,7 +50,7 @@ int Strategy_MissingCol ( Sudoku* sud, int x )
 	}
 
 	_tprintf ( _T ( "reached unreachable statement\r\nModule: %s\r\nLine:%i\r\nDescription:\
-																																																																																																																						  \r\nCol is missing 1 value but no cell is empty\r\n" ), __FILE__, __LINE__ );
+																																																																																																																																																									  \r\nCol is missing 1 value but no cell is empty\r\n" ), __FILE__, __LINE__ );
 
 	return 0;
 }
@@ -81,7 +81,7 @@ int Strategy_MissingRow ( Sudoku* sud, int y )
 	}
 
 	_tprintf ( _T ( "reached unreachable statement\r\nModule: %s\r\nLine:%i\r\nDescription:\
-																																																																																																																						  \r\nRow is missing 1 value but no cell is empty\r\n" ), __FILE__, __LINE__ );
+																																																																																																																																																									  \r\nRow is missing 1 value but no cell is empty\r\n" ), __FILE__, __LINE__ );
 
 	return 0;
 }
@@ -117,7 +117,7 @@ int Strategy_MissingBox ( Sudoku* sud, int x, int y )
 	}
 
 	_tprintf ( _T ( "reached unreachable statement\r\nModule: %s\r\nLine:%i\r\nDescription:\
-																																																																																																																						  				  \r\nBox is missing 1 value but no cell is empty\r\n" ), __FILE__, __LINE__ );
+																																																																																																																																																									  				  \r\nBox is missing 1 value but no cell is empty\r\n" ), __FILE__, __LINE__ );
 
 	return 0;
 }
@@ -160,7 +160,7 @@ int logic_solve ( Sudoku* sud )
 		{
 			if ( !change )
 			{
-				rc = rules[i] ( sud );
+				rc = rules[i] ( sud, x, y );
 			}
 		}
 		if ( !change )
@@ -260,15 +260,27 @@ int rule3 ( Sudoku* sud, int x, int y )
 int rule4 ( Sudoku* sud, int x, int y )
 {
 	int iX, iY;
+	int i, j, k;
+	int cnt = 0;
 
-	for ( iX = 0; iX < sud->length; iX++ )
+	for ( i = 0; i < NUM_ELEMENTS; i++ )
 	{
-		for ( iY = 0; iY < sud->length; iY++ )
+		for ( j = 0; j < sud->length; j++ )
 		{
-			for ( int i = 0; i < sud->length; i++ )
+			for ( k = 1; k <= sud->length; k++ )
 			{
-				for ( )
-					sud->contains[i][][];
+				cnt += sud->contains[i][j][k];
+			}
+		}
+	}
+	if ( cnt == 1 )
+	{
+		for ( i = 0; i < sud->length; i++ )
+		{
+			if ( sud->grid[y][x][i + 1] == 1 )
+			{
+				Sudoku_SetCell (sud, x, y, sud->grid[y][x][i + 1] );
+				return 1;
 			}
 		}
 	}
