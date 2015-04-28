@@ -189,7 +189,43 @@ int rule1 ( Sudoku* sud )
 						{
 							if ( sud->grid[iY][i][z + 1] )
 							{
-								return 0;//Retrun if there are more than one possible position for z ijn row 
+								return 0;//Retrun if there are more than one possible position for z in row 
+							}
+						}
+					}
+				}
+				sud->grid[iY][iX][0] = z; //set z as cell value for cell[iX][iY]
+
+				for ( int i = 0; i < sud->length; i++ )//Set all candiates to zero (disable all)
+				{
+					sud->grid[iY][iX][i + 1] = 0;
+				}
+			}
+		}
+	}
+}
+
+int rule2 ( Sudoku* sud )
+{
+	int iX, iY;
+	int z;
+	int i;
+
+	for ( iX = 0; iX < sud->length; iX++ )//loop trought all cells in x direction
+	{
+		for ( iY = 0; iY < sud->length; iY++ )//loop trought all cells in y direction
+		{
+			if ( sud->grid[iY][iX][0] == 0 )//Search only in empty cells
+			{
+				for ( z = 1; z < sud->length; z++ )//loop trought possible candidates
+				{
+					if ( sud->grid[iY][iX][z + 1] )//check if z is candidate for cell[iX][iY]
+					{
+						for ( i = 0; i < sud->length; i++ )
+						{
+							if ( sud->grid[i][iX][z + 1] )
+							{
+								return 0;//Retrun if there are more than one possible position for z in column 
 							}
 						}
 					}
