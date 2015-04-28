@@ -95,24 +95,25 @@ int logic_solve ( Sudoku* sud )
 		}
 		if ( empty == 0 )//If none empty return 
 		{
-			return 1;//Solved
+			return 0;//Solved
 		}
-		for ( i = 0; i < RULE_CNT; i++ )
+		for ( i = 0; i < RULE_CNT; i++ )//Loop trought rules
 		{
-			while ( !change )
+			for ( x = 0; x < sud->length; x++ )//loop trought c positions
 			{
-				for ( x = 0; x < sud->length; x++ )
+				for ( y = 0; y < sud->length; y++ ) //Loop trought y positions
 				{
-					for ( y = 0; y < sud->length; y++ )
-					{
-						change = rules[i] ( sud, x, y );
-					}
+					change = rules[i] ( sud, x, y );
 				}
+			}
+			if ( change )
+			{
+				break;
 			}
 		}
 		if ( !change )
 		{
-			return 0;//Not solvable
+			return 1;//Not solvable
 		}
 	}
 }

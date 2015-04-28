@@ -50,7 +50,7 @@ int Strategy_MissingCol ( Sudoku* sud, int x )
 	}
 
 	_tprintf ( _T ( "reached unreachable statement\r\nModule: %s\r\nLine:%i\r\nDescription:\
-																																																																																																																																																									  \r\nCol is missing 1 value but no cell is empty\r\n" ), __FILE__, __LINE__ );
+																																																																																																																																																														  \r\nCol is missing 1 value but no cell is empty\r\n" ), __FILE__, __LINE__ );
 
 	return 0;
 }
@@ -81,7 +81,7 @@ int Strategy_MissingRow ( Sudoku* sud, int y )
 	}
 
 	_tprintf ( _T ( "reached unreachable statement\r\nModule: %s\r\nLine:%i\r\nDescription:\
-																																																																																																																																																									  \r\nRow is missing 1 value but no cell is empty\r\n" ), __FILE__, __LINE__ );
+																																																																																																																																																														  \r\nRow is missing 1 value but no cell is empty\r\n" ), __FILE__, __LINE__ );
 
 	return 0;
 }
@@ -117,7 +117,7 @@ int Strategy_MissingBox ( Sudoku* sud, int x, int y )
 	}
 
 	_tprintf ( _T ( "reached unreachable statement\r\nModule: %s\r\nLine:%i\r\nDescription:\
-																																																																																																																																																									  				  \r\nBox is missing 1 value but no cell is empty\r\n" ), __FILE__, __LINE__ );
+																																																																																																																																																														  				  \r\nBox is missing 1 value but no cell is empty\r\n" ), __FILE__, __LINE__ );
 
 	return 0;
 }
@@ -129,30 +129,25 @@ int rule1 ( Sudoku* sud, int x, int y )
 	int z;
 	int i;
 
-	for ( x = 0; x < sud->length; x++ )//loop trought all cells in x direction
+	if ( sud->grid[y][x][0] == 0 )//Search only in empty cells
 	{
-		for ( y = 0; y < sud->length; y++ )//loop trought all cells in y direction
+		for ( z = 1; z < sud->length; z++ )//loop trought possible candidates
 		{
-			if ( sud->grid[y][x][0] == 0 )//Search only in empty cells
+			if ( sud->grid[y][x][z + 1] )//check if z is candidate for cell[iX][iY]
 			{
-				for ( z = 1; z < sud->length; z++ )//loop trought possible candidates
+				for ( i = 0; i < sud->length; i++ )
 				{
-					if ( sud->grid[y][x][z + 1] )//check if z is candidate for cell[iX][iY]
+					if ( sud->grid[y][i][z + 1] )
 					{
-						for ( i = 0; i < sud->length; i++ )
-						{
-							if ( sud->grid[y][i][z + 1] )
-							{
-								return 0;//Retrun if there are more than one possible position for z in row 
-							}
-						}
+						return 0;//Retrun if there are more than one possible position for z in row 
 					}
 				}
-				Sudoku_SetCell ( sud, x, y, z );
-				return 1;
 			}
 		}
+		Sudoku_SetCell ( sud, x, y, z );
+		return 1;
 	}
+
 }
 
 int rule2 ( Sudoku* sud, int x, int y )
@@ -236,7 +231,7 @@ int rule4 ( Sudoku* sud, int x, int y )
 		{
 			if ( sud->grid[y][x][i + 1] == 1 )
 			{
-				Sudoku_SetCell (sud, x, y, sud->grid[y][x][i + 1] );	//set as value
+				Sudoku_SetCell ( sud, x, y, sud->grid[y][x][i + 1] );	//set as value
 				return 1;
 			}
 		}
@@ -255,13 +250,14 @@ ten einzig auf die Elemente der Menge M zuzuordnen sind. Alle weiteren totalen
 Nachbarelemente können jedes Element aus den Kandidatenlisten von M von ihrer
 Kandidatenliste streichen
 */
-int rule5( Sudoku* sud, int x, int y ) {
+int rule5 ( Sudoku* sud, int x, int y )
+{
 	int i;
 	int possible_count;
 
 	//bestimme Anzahl und Möglichkeiten für aktuelle Zelle
 	possible_count = 0;
-	for( i = 1; i <= sud->length; i++ ) if( sud->grid[y][x][i] == CELL_POSSIBLE ) sud->buffer[possible_count++] = i;
+	for ( i = 1; i <= sud->length; i++ ) if ( sud->grid[y][x][i] == CELL_POSSIBLE ) sud->buffer[possible_count++] = i;
 
 
 }
