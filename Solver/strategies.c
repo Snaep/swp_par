@@ -239,25 +239,211 @@ int rule4 ( Sudoku* sud, int x, int y )
 	return 0;
 }
 
-
-/*
-Es wird eine Menge M mit benach-
-barten Elementen mit gleichen Kandidatenlisten gebildet. Die Elemente müssen
-in totaler Nachbarschaft stehen, also jedes Element muss Nachbarelement jedes
-anderen Elementes sein. Sollte es nun genau soviele Elemente in M geben wie
-es Elemente in jeder Kandidatenliste gibt, so folgt daraus dass diese Kandida-
-ten einzig auf die Elemente der Menge M zuzuordnen sind. Alle weiteren totalen
-Nachbarelemente können jedes Element aus den Kandidatenlisten von M von ihrer
-Kandidatenliste streichen
-*/
-int rule5 ( Sudoku* sud, int x, int y )
-{
-	int i;
-	int possible_count;
-
-	//bestimme Anzahl und Möglichkeiten für aktuelle Zelle
-	possible_count = 0;
-	for ( i = 1; i <= sud->length; i++ ) if ( sud->grid[y][x][i] == CELL_POSSIBLE ) sud->buffer[possible_count++] = i;
+//naked pairs row
+int rule5( Sudoku* sud, int x, int y ) {
+	int i, j;
+	int cellIsEqual;
+	int exitLoop;
+	int changed; //rerturn value if set was found
+	int needed_cellcount; //required no of cells in neighbourhood with same possibilities
+	int found_neighbours; //no of cells in neighbourhood with same possibilities
+	int* relevant_neighbours; //position of relevant cells in neighbourhood
 
 
+	relevant_neighbours = sud->buffer;
+	needed_cellcount = 0;
+	changed = FALSE;
+
+	//count no of possibilities for current cell
+	needed_cellcount = 0;
+	for( i = 1; i <= sud->length; i++ ) {
+		needed_cellcount += ( sud->grid[y][x][i] == CELL_POSSIBLE );
+	}
+
+	//find cells with same possibilities in row
+	for( i = 0; i < sud->length; i++ ) {
+		if( i == x ) continue;
+
+		//check if cell has equal possibilities
+		cellIsEqual = TRUE;
+		for( j = 1; j <= sud->length; j++ ) {
+			if( sud->grid[y][i][j] != sud->grid[y][x][j] ) {
+				cellIsEqual = FALSE;
+				break;
+			}
+		}
+		//if possibilities match, mark cell as relevant
+		if( cellIsEqual ) relevant_neighbours[found_neighbours++] = i;
+
+		//done if max no of cells with same possibilities is reached
+		if( found_neighbours == needed_cellcount ) break;
+	}
+
+	if( found_neighbours != needed_cellcount ) return 0;
+
+	//delete possibilities from current neighbourhood
+	exitLoop = FALSE;
+	for( i = 0; i < sud->length; i++ ) {
+		//check if current cell is a relevant cell
+		for( j = 0; j < found_neighbours; j++ ) {
+			if( i == j ) { //if current cell is relevant cell, dont delete possibilities
+				exitLoop = TRUE;
+				break;
+			}
+		}
+		if( exitLoop ) continue;
+		//delete all possibilities from cell 
+		//that can be placed in relevant cell set
+		for( j = 1; j <= sud->length; j++ ) {
+			if( sud->grid[y][i][j] == CELL_POSSIBLE && sud->grid[y][x][j] == CELL_POSSIBLE ) {
+				changed = TRUE;
+				sud->grid[y][i][j] = CELL_IMPOSSIBLE;
+			}
+		}
+	}
+
+
+	return changed;
+}
+//naked pairs col
+int rule6( Sudoku* sud, int x, int y ) {
+	int i, j;
+	int cellIsEqual;
+	int exitLoop;
+	int changed; //rerturn value if set was found
+	int needed_cellcount; //required no of cells in neighbourhood with same possibilities
+	int found_neighbours; //no of cells in neighbourhood with same possibilities
+	int* relevant_neighbours; //position of relevant cells in neighbourhood
+
+
+	relevant_neighbours = sud->buffer;
+	needed_cellcount = 0;
+	changed = FALSE;
+
+	//count no of possibilities for current cell
+	needed_cellcount = 0;
+	for( i = 1; i <= sud->length; i++ ) {
+		needed_cellcount += ( sud->grid[y][x][i] == CELL_POSSIBLE );
+	}
+
+	//find cells with same possibilities in col
+	for( i = 0; i < sud->length; i++ ) {
+		if( i == y ) continue;
+
+		//check if cell has equal possibilities
+		cellIsEqual = TRUE;
+		for( j = 1; j <= sud->length; j++ ) {
+			if( sud->grid[i][x][j] != sud->grid[y][x][j] ) {
+				cellIsEqual = FALSE;
+				break;
+			}
+		}
+		//if possibilities match, mark cell as relevant
+		if( cellIsEqual ) relevant_neighbours[found_neighbours++] = i;
+
+		//done if max no of cells with same possibilities is reached
+		if( found_neighbours == needed_cellcount ) break;
+	}
+
+	if( found_neighbours != needed_cellcount ) return 0;
+
+	//delete possibilities from current neighbourhood
+	exitLoop = FALSE;
+	for( i = 0; i < sud->length; i++ ) {
+		//check if current cell is a relevant cell
+		for( j = 0; j < found_neighbours; j++ ) {
+			if( i == j ) { //if current cell is relevant cell, dont delete possibilities
+				exitLoop = TRUE;
+				break;
+			}
+		}
+		if( exitLoop ) continue;
+		//delete all possibilities from cell 
+		//that can be placed in relevant cell set
+		for( j = 1; j <= sud->length; j++ ) {
+			if( sud->grid[i][x][j] == CELL_POSSIBLE && sud->grid[y][x][j] == CELL_POSSIBLE ) {
+				changed = TRUE;
+				sud->grid[i][x][j] = CELL_IMPOSSIBLE;
+			}
+		}
+	}
+
+
+	return changed;
+}
+//naked pair box
+int rule7( Sudoku* sud, int x, int y ) {
+	int i, j, k, l, p;
+	int cellIsEqual;
+	int exitLoop;
+	int changed; //rerturn value if set was found
+	int needed_cellcount; //required no of cells in neighbourhood with same possibilities
+	int found_neighbours; //no of cells in neighbourhood with same possibilities
+	int* relevant_neighbours; //position of relevant cells in neighbourhood
+
+
+	relevant_neighbours = sud->buffer;
+	needed_cellcount = 0;
+	changed = FALSE;
+
+	//count no of possibilities for current cell
+	needed_cellcount = 0;
+	for( i = 1; i <= sud->length; i++ ) {
+		needed_cellcount += ( sud->grid[y][x][i] == CELL_POSSIBLE );
+	}
+
+	//find cells with same possibilities in box
+	for( i = k = x - x % sud->length_of_box; i < k + sud->length_of_box; i++ ) {
+		for( j = l = y - y % sud->length_of_box; j < l + sud->length_of_box; j++ ) {
+			if( i == x && j == y ) continue;
+
+
+			//check if cell has equal possibilities
+			cellIsEqual = TRUE;
+			for( p = 1; p <= sud->length; p++ ) {
+				if( sud->grid[j][i][p] != sud->grid[y][x][p] ) {
+					cellIsEqual = FALSE;
+					break;
+				}
+			}
+
+			//if possibilities match, mark cell as relevant
+			if( cellIsEqual ) {
+				relevant_neighbours[found_neighbours++] = i;
+				relevant_neighbours[found_neighbours++] = j;
+			}
+
+			//done if max no of cells with same possibilities is reached
+			if( found_neighbours / 2 == needed_cellcount ) break;
+		}
+	}
+
+	if( found_neighbours / 2 != needed_cellcount ) return 0;
+
+	//delete possibilities from current neighbourhood
+	exitLoop = FALSE;
+
+	for( i = k = x - x % sud->length_of_box; i < k + sud->length_of_box; i++ ) {
+		for( j = l = y - y % sud->length_of_box; j < l + sud->length_of_box; j++ ) {
+			for( p = 0; p < found_neighbours; p += 2 ) {
+				if( relevant_neighbours[p] == i && relevant_neighbours[p + 1] == j ) {//if current cell is relevant cell, dont delete possibilities
+					exitLoop = TRUE;
+					break;
+				}
+			}
+
+			if( exitLoop ) continue;
+
+			//delete all possibilities from cell 
+			//that can be placed in relevant cell set
+			for( p = 1; p <= sud->length; p++ ) {
+				if( sud->grid[j][i][p] == CELL_POSSIBLE && sud->grid[y][x][p] == CELL_POSSIBLE ) {
+					changed = TRUE;
+					sud->grid[j][i][p] = CELL_IMPOSSIBLE;
+				}
+			}
+		}
+	}
+
+	return changed;
 }
