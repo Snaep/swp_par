@@ -122,53 +122,7 @@ int Strategy_MissingBox ( Sudoku* sud, int x, int y )
 	return 0;
 }
 
-int logic_solve ( Sudoku* sud )
-{
-	int change = 1;
-	int wert = 0;
-	int iX, iY;
-	int i;
-	int empty;
-	int rc;
 
-	rules[0] = rule1;
-	rules[1] = rule2;
-	rules[2] = rule3;
-	rules[3] = rule4;
-	rules[4] = rule5;
-	rules[5] = rule6;
-
-	while ( change )
-	{
-		change = 0;
-		empty = 0;
-		for ( iX = 0; iX < sud->length; iX++ )//count empty cells
-		{
-			for ( iY = 0; iY < sud->length; iY++ )
-			{
-				if ( sud->grid[iY][iX][0] == 0 )
-				{
-					empty++;
-				}
-			}
-		}
-		if ( empty == 0 )//If none empty return 
-		{
-			return 1;//Solved
-		}
-		for ( i = 0; i < RULE_CNT; i++ )
-		{
-			if ( !change )
-			{
-				rc = rules[i] ( sud, x, y );
-			}
-		}
-		if ( !change )
-		{
-			return 0;//Not solvable
-		}
-	}
-}
 int rule1 ( Sudoku* sud, int x, int y )
 {
 
