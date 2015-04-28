@@ -149,6 +149,7 @@ int rule1 ( Sudoku* sud, int x, int y )
 					}
 				}
 				Sudoku_SetCell ( sud, x, y, z );
+				return 1;
 			}
 		}
 	}
@@ -175,6 +176,7 @@ int rule2 ( Sudoku* sud, int x, int y )
 			}
 		}
 		Sudoku_SetCell ( sud, x, y, z );
+		return 1;
 	}
 }
 
@@ -208,6 +210,7 @@ int rule3 ( Sudoku* sud, int x, int y )
 		}
 
 		Sudoku_SetCell ( sud, x, y, z );
+		return 1;
 	}
 
 }
@@ -223,21 +226,22 @@ int rule4 ( Sudoku* sud, int x, int y )
 		{
 			for ( k = 1; k <= sud->length; k++ )
 			{
-				cnt += sud->contains[i][j][k];
+				cnt += sud->contains[i][j][k];//count number of possible candidates
 			}
 		}
 	}
-	if ( cnt == 1 )
+	if ( cnt == 1 )//if only one possible candidate 
 	{
 		for ( i = 0; i < sud->length; i++ )
 		{
 			if ( sud->grid[y][x][i + 1] == 1 )
 			{
-				Sudoku_SetCell (sud, x, y, sud->grid[y][x][i + 1] );
+				Sudoku_SetCell (sud, x, y, sud->grid[y][x][i + 1] );	//set as value
 				return 1;
 			}
 		}
 	}
+	return 0;
 }
 
 
