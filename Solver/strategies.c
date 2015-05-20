@@ -121,8 +121,6 @@ int Strategy_MissingBox ( Sudoku* sud, int x, int y )
 
 	return 0;
 }
-
-
 int rule1 ( Sudoku* sud, int x, int y )
 {
 

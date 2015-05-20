@@ -3,7 +3,7 @@
 
 //Solver for Sudoku
 //Gets Sudoku and the strategies to use
-int SolveSequential ( Sudoku* sud, unsigned int strategies )
+/*int SolveSequential ( Sudoku* sud, unsigned int strategies )
 {
 	int x, y, i;
 	int changes;
@@ -46,21 +46,21 @@ int SolveSequential ( Sudoku* sud, unsigned int strategies )
 	} while ( changes != 0 );
 
 	return changes;
-}
+}*/
 
 
 
 
 
-static Solver solver[] = {
+/*static Solver solver[] = {
 	&SolveSequential
-};
+};*/
 
-Solver GetSolver ( unsigned int parallelization )
+/*Solver GetSolver ( unsigned int parallelization )
 {
 	if ( parallelization >= sizeof( solver ) / sizeof( Solver ) ) return NULL;
 	return solver[parallelization];
-}
+}*/
 
 
 int logic_solve ( Sudoku* sud )
@@ -70,12 +70,15 @@ int logic_solve ( Sudoku* sud )
 	int i;
 	int empty;
 
+	int ( *rules[RULE_CNT] )( Sudoku*, int x, int y );
+
 	rules[0] = rule1;
 	rules[1] = rule2;
 	rules[2] = rule3;
 	rules[3] = rule4;
 	rules[4] = rule5;
 	rules[5] = rule6;
+	rules[7] = rule7;
 
 	while ( change )
 	{

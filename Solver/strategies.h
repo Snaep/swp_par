@@ -13,9 +13,9 @@
 #define STRAT_SINGLE_POSSIBILITY (1<<3)
 
 //define number of rules to solve Sudoku
-#define RULE_CNT 6
+#define RULE_CNT 7
 
-int ( *rules[RULE_CNT] )( Sudoku*, int x, int y );
+
 
 //checks if cell has only 1 possibility left and sets the value in grid
 //returns amount of changed cells  (0,1)
@@ -34,4 +34,5 @@ int rule3 ( Sudoku* sud, int x, int y );
 int rule4 ( Sudoku* sud, int x, int y );
 int rule5 ( Sudoku* sud, int x, int y );
 int rule6 ( Sudoku* sud, int x, int y );
+int rule7 ( Sudoku* sud, int x, int y );
 int rule8 ( Sudoku* sud, int x, int y );//Block line Interactions
